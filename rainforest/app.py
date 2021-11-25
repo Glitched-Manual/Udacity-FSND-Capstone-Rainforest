@@ -1,7 +1,7 @@
-import os
+import os ,sys
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 def create_app(test_config=None):
   # create and configure the app
