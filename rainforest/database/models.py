@@ -34,7 +34,7 @@ class User(db.Model):
     name = db.Column(db.Integer, nullable=False)
     address = db.Column(db.String, nullable=False)
     number = db.Column(db.String, nullable=False)
-    orders = db.Column(db.Array(db.relationship('Order', backref='user', lazy=True)))
+    orders = db.relationship('Order', backref='user', lazy=True)
 
 
 # Order
@@ -44,7 +44,7 @@ The class that contains all the orderItems for a users transaction
 attributes:
 
 User.id int
-orderItems [int]
+orderItems [int] not needed just check where the customer id exists in the orders
 
 """
 class Order(db.Model):
@@ -53,16 +53,6 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_items = db.relationship('OrderItem', backref='order', lazy=True)
     user_id = db.Column(db.Integer, db.Foriegn_key('User.id'), nullable=False)
-
-# OrderItem
-"""
-An Item within the order with a quantity (delete if quatity is zero)
-
-attributes:
-Order.id
-Product.id
-ItemQuantity int
-"""
 
 
 # Product
@@ -76,3 +66,25 @@ attributes:
 - price
 
 """
+class Product(db.Model):
+    __tablename__='Product'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+
+# OrderItem
+"""
+An Item within the order with a quantity (delete if quatity is zero)
+ 2 x foriegn keys
+attributes:
+Order.id
+Product.id
+ItemQuantity int
+"""
+class OrderItem(db.Model):
+    __tablename__='OrderItem'
+
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.Foriegn_key('Order.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.Foriegn_key('Product.id'), nullable=False)
+
