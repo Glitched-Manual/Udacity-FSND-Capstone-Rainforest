@@ -3,7 +3,7 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, String, Integer, create_engine
+from sqlalchemy import Column, String, Integer, ForeignKey, create_engine
 from sqlalchemy.orm import backref
 
 
@@ -39,8 +39,8 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Integer, nullable=False)
-    address = db.Column(db.String, nullable=False)
-    number = db.Column(db.String, nullable=False)
+    #address = db.Column(db.String, nullable=False) #not needed
+    #number = db.Column(db.String, nullable=False)  #not needed
     orders = db.relationship('Order', backref='user', lazy=True)
 
 
@@ -59,7 +59,7 @@ class Order(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     order_items = db.relationship('OrderItem', backref='order', lazy=True)
-    user_id = db.Column(db.Integer, db.Foriegn_key('User.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
 
 
 # Product
@@ -77,7 +77,9 @@ class Product(db.Model):
     __tablename__='Product'
 
     id = db.Column(db.Integer, primary_key=True)
-
+    name = db.Column(db.String, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.String, nullable=True)
 
 # OrderItem
 """
@@ -92,6 +94,6 @@ class OrderItem(db.Model):
     __tablename__='OrderItem'
 
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.Foriegn_key('Order.id'), nullable=False)
-    product_id = db.Column(db.Integer, db.Foriegn_key('Product.id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('Order.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('Product.id'), nullable=False)
 

@@ -7,6 +7,13 @@ from flask_sqlalchemy import SQLAlchemy
 from app import create_app
 from database.models import setup_db, User, OrderItem, Order, Product
 
+#no auth in this file
+#put auth in none test and the postman file,
+# no the test uses methods from the mmain app code, it needs auth or just an admin auth
+# no just one api
+#get admin token from env file
+
+#it should probably should run on a test api on the main api so the test auth cannot do anything even if leaked
 class RainforestTestCase(unittest.TestCase):
     """This class represents the Rainforest test case"""
 
@@ -26,6 +33,18 @@ class RainforestTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
+            # store values for tests one of each User, Order, OrderItem, Product
+            self.user = User(
+                name='chris condo'                
+            )
+            self.product = Product(
+
+            )
+
+            self.order = Order(
+                order_items=1,
+                user_id=1
+            )
 
     def tearDown(self):
         """Executed after reach test"""
