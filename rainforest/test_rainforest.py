@@ -4,10 +4,15 @@ import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 
+
+#import sys
+#print(sys.executable)
+
 from app import create_app
 from database import models
 
- 
+# I need to use pytest or stick with unittest which ever works
+#pytest supports tokens
 
 
 #no auth in this file
@@ -70,3 +75,10 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
 
         self.assertTrue(data['products'], True)
+
+
+
+# Make the tests conveniently executable
+# I forgot to use this
+if __name__ == "__main__":
+    unittest.main()
