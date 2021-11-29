@@ -2,12 +2,14 @@ import os ,sys
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
-from .database.models import db_drop_and_create_all, setup_db
-from .auth.auth import AuthError, requires_auth
+from database.models import db_drop_and_create_all, setup_db
+from auth.auth import AuthError, requires_auth
 
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
+  #setup_db only needs to be call here locally, because mange.py does not work locally
+  setup_db(app)
   CORS(app)
 
   return app

@@ -5,7 +5,10 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 
 from app import create_app
-from database.models import setup_db, User, OrderItem, Order, Product
+from database import models
+
+ 
+
 
 #no auth in this file
 #put auth in none test and the postman file,
@@ -25,7 +28,7 @@ class RainforestTestCase(unittest.TestCase):
         self.database_path = "postgresql://student:student@{}/{}".format(
             'localhost:5432', self.database_name)
 
-        setup_db(self.app, self.database_path)
+        models.setup_db(self.app, self.database_path)
 
         # binds the app to the current context
         with self.app.app_context():
@@ -34,14 +37,14 @@ class RainforestTestCase(unittest.TestCase):
             # create all tables
             self.db.create_all()
             # store values for tests one of each User, Order, OrderItem, Product
-            self.user = User(
+            self.user = models.User(
                 name='chris condo'                
             )
-            self.product = Product(
+            self.product = models.Product(
 
             )
 
-            self.order = Order(
+            self.order = models.Order(
                 order_items=1,
                 user_id=1
             )
@@ -59,3 +62,11 @@ class RainforestTestCase(unittest.TestCase):
     / product test
     """
 
+    def test_get_products(self):
+        res = self.client().get('/products')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+        self.assertTrue(data['products'], True)
