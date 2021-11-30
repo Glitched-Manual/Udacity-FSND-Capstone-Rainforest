@@ -63,7 +63,12 @@ def get_products():
 
     selected_products = paginate_data(request, all_products)
 
-    return ':>'
+    return jsonify({
+        'success': True,
+        'products': selected_products,
+        'total_products': total_products
+
+    })
 
 
 @APP.errorhandler(404)

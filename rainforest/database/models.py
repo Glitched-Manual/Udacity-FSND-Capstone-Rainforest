@@ -3,7 +3,7 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, String, Integer, ForeignKey, create_engine
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, create_engine
 from sqlalchemy.orm import backref
 
 
@@ -16,13 +16,32 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    db.create_all()
-
+    #db.create_all()
+    db_drop_and_create_all()
 
 
 def db_drop_and_create_all():
     db.drop_all()
     db.create_all()
+
+    # create a dummy product, user, order, and order_item for development
+
+    user = User(
+        name = 'slippery sam'
+    )
+
+    user.insert()
+
+   # - name
+   # - description
+   # - price
+
+    product = Product(
+        name = "Rainforset t-shirt",
+        description = "",
+        price = 10.00
+
+    )
 
 
 # User
@@ -78,7 +97,7 @@ class Product(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
     description = db.Column(db.String, nullable=True)
 
 # OrderItem
