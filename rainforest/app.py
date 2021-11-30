@@ -3,23 +3,21 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 
-print("****** __name__ :" + __name__)
+
 if __name__ == 'rainforest.app':    
     from .database.models import db_drop_and_create_all, setup_db, User, Order, OrderItem, Product
     from .auth.auth import AuthError, requires_auth
-    print("__name__ == 'rainforest.app'")
+    #print("__name__ == 'rainforest.app'")
 elif  __name__ == 'app':
     try:
-        print("xxxxxxxx __name__ :" + __name__)
-        from database.models import setup_db
-        from auth import auth
-        print("__name__ != 'rainforest.app'")
+        #print("xxxxxxxx __name__ :" + __name__)
+        from database.models import db_drop_and_create_all, setup_db, User, Order, OrderItem, Product
+        from auth.auth import AuthError, requires_auth
+        #print("__name__ != 'rainforest.app'")
 
     except:
         pass
-#import sys
-#print(sys.executable)
-#print(sys.modules)
+
 
 Results_PER_PAGE = 10
 
@@ -34,6 +32,9 @@ def paginate_data(request, selection):
 
     return selected_data
 
+#----------------------------------------------------------------------------#
+# App Config.
+#----------------------------------------------------------------------------#
 
 
 def create_app(test_config=None):
@@ -51,14 +52,9 @@ if __name__ == '__main__':
     APP.run(host='0.0.0.0', port=8080, debug=True)
 
 
-###########################################################################################
-"""
-
-Endpoints
-
-
-"""
-###########################################################################################
+#----------------------------------------------------------------------------#
+#Endpoints
+#----------------------------------------------------------------------------#
 
 
 @APP.route('/')
@@ -70,7 +66,7 @@ def welcome_to_root():
 @APP.route('/products')
 def get_products():
 
-    all_products = models.Product.query.order_by(models.Product.id).all()
+    all_products = Product.query.order_by(Product.id).all()
     total_products = len(all_products)
 
     if total_products <= 0:

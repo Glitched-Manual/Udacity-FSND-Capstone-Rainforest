@@ -16,9 +16,26 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    #db.create_all()
-    db_drop_and_create_all()
+    db.create_all()
+    #db_drop_and_create_all()
 
+"""
+object creation process
+
+1.
+user
+product
+
+2. order
+    user.id
+
+3. order_item
+
+    Order.id
+    Product.id
+    ItemQuantity int
+
+"""
 
 def db_drop_and_create_all():
     db.drop_all()
@@ -29,24 +46,47 @@ def db_drop_and_create_all():
     user = User(
         name = 'slippery sam'
     )
-    # direct insert is not working added method from models file
+    
     user.insert()
-    #db.session.add(user)
-   # - name
-   # - description
-   # - price
-
+    
     product = Product(
-        name = "Rainforset t-shirt",
-        description = "",
-        price = 10.00
+        name = "Rainforset t-shirt - black/green",
+        description = "a Rainforest exclusive t-shirt",
+        price = 10.99
 
     )
+    product.insert()
 
+    order = Order(
+        user_id = 1
+    )
+    order.insert()
+
+    order_item = OrderItem(
+        order_id = 1,
+        product_id = 1
+    )
+    order_item.insert()
 #
 # lol I found these. I thought this was part of sqlalchemy
 
+"""
+object creation process
 
+1.
+user
+product
+
+2. order
+    user.id
+
+3. order_item
+
+    Order.id
+    Product.id
+    ItemQuantity int
+
+"""
 
 # User
 """
@@ -54,14 +94,14 @@ The class to carry the user's profile
 
 attributes:
 
-Orders (array of odred ids ) [int]
+Orders (array of order ids ) [int]
 """
 
 class User(db.Model):
     __tablename__ = 'User'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String, nullable=False)
     #address = db.Column(db.String, nullable=False) #not needed
     #number = db.Column(db.String, nullable=False)  #not needed
     orders = db.relationship('Order', backref='user', lazy=True)
@@ -85,7 +125,7 @@ The class that contains all the orderItems for a users transaction
 attributes:
 
 User.id int
-orderItems [int] not needed just check where the customer id exists in the orders
+
 
 """
 class Order(db.Model):

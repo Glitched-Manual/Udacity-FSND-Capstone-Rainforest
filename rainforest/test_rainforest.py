@@ -40,7 +40,7 @@ class RainforestTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "rainforest_test"
+        self.database_name = "rainforest_db"
         self.database_path = "postgresql://student:student@{}/{}".format(
             'localhost:5432', self.database_name)
 
@@ -57,11 +57,12 @@ class RainforestTestCase(unittest.TestCase):
                 name='chris condo'                
             )
             self.product = models.Product(
-
+                name = "Test Nova TX7",
+                description = "The bleedind edge of Tesla Hydro car innovation",
+                price = 1780000.99
             )
 
             self.order = models.Order(
-                order_items=1,
                 user_id=1
             )
 
@@ -79,6 +80,9 @@ class RainforestTestCase(unittest.TestCase):
     """
 
     def test_get_products(self):
+
+        #self.product.insert()
+
         res = self.client().get('/products')
         data = json.loads(res.data)
 
