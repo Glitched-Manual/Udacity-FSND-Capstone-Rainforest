@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 import sys
 #print(sys.executable)
 #print(sys.modules)
-from app import create_app
+from app import create_app, setup_db
 from database import models
 
 # I need to use pytest or stick with unittest which ever works

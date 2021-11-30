@@ -8,10 +8,10 @@ if __name__ == 'rainforest.app':
     from .database.models import db_drop_and_create_all, setup_db, User, Order, OrderItem, Product
     from .auth.auth import AuthError, requires_auth
     print("__name__ == 'rainforest.app'")
-elif  __name__ == 'test_rainforest':
+elif  __name__ == 'app':
     try:
         print("xxxxxxxx __name__ :" + __name__)
-        from database import models
+        from database.models import setup_db
         from auth import auth
         print("__name__ != 'rainforest.app'")
 
