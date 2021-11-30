@@ -2,8 +2,8 @@
 import os
 import unittest
 import json
+from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, create_engine
 from sqlalchemy.orm import backref
 
 
@@ -29,9 +29,9 @@ def db_drop_and_create_all():
     user = User(
         name = 'slippery sam'
     )
-
+    # direct insert is not working added method from models file
     user.insert()
-
+    #db.session.add(user)
    # - name
    # - description
    # - price
@@ -42,6 +42,10 @@ def db_drop_and_create_all():
         price = 10.00
 
     )
+
+#
+# lol I found these. I thought this was part of sqlalchemy
+
 
 
 # User
@@ -62,6 +66,17 @@ class User(db.Model):
     #number = db.Column(db.String, nullable=False)  #not needed
     orders = db.relationship('Order', backref='user', lazy=True)
 
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
 
 # Order
 """
@@ -80,6 +95,16 @@ class Order(db.Model):
     order_items = db.relationship('OrderItem', backref='order', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
 
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
 
 # Product
 """
@@ -100,6 +125,17 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     description = db.Column(db.String, nullable=True)
 
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
 # OrderItem
 """
 An Item within the order with a quantity (delete if quatity is zero)
@@ -116,3 +152,13 @@ class OrderItem(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('Order.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('Product.id'), nullable=False)
 
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
