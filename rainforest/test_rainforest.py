@@ -12,7 +12,18 @@ from app import create_app
 from database import models
 
 # I need to use pytest or stick with unittest which ever works
-#pytest supports tokens
+#pytest supports tokens. no the token method has nothing to do with pytest
+# ** The rubric calls for using unittest
+"""
+Includes at least one test for expected success and error behavior for each endpoint using the unittest library
+Includes tests demonstrating role-based access control, at least two per role.
+
+Roles:
+
+Clerk, Manager
+
+"""
+
 
 
 #no auth in this file
