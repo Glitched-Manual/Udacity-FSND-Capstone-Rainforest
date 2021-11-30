@@ -5,9 +5,9 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 
 
-#import sys
+import sys
 #print(sys.executable)
-
+#print(sys.modules)
 from app import create_app
 from database import models
 

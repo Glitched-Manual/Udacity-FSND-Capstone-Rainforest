@@ -2,9 +2,24 @@ import os ,sys
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
-from database.models import db_drop_and_create_all, setup_db, User, Order, OrderItem, Product
-from auth.auth import AuthError, requires_auth
 
+print("****** __name__ :" + __name__)
+if __name__ == 'rainforest.app':    
+    from .database.models import db_drop_and_create_all, setup_db, User, Order, OrderItem, Product
+    from .auth.auth import AuthError, requires_auth
+    print("__name__ == 'rainforest.app'")
+elif  __name__ == 'test_rainforest':
+    try:
+        print("xxxxxxxx __name__ :" + __name__)
+        from database import models
+        from auth import auth
+        print("__name__ != 'rainforest.app'")
+
+    except:
+        pass
+#import sys
+#print(sys.executable)
+#print(sys.modules)
 
 Results_PER_PAGE = 10
 
@@ -55,7 +70,7 @@ def welcome_to_root():
 @APP.route('/products')
 def get_products():
 
-    all_products = Product.query.order_by(Product.id).all()
+    all_products = models.Product.query.order_by(models.Product.id).all()
     total_products = len(all_products)
 
     if total_products <= 0:
