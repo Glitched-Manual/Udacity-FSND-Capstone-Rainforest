@@ -92,7 +92,13 @@ class RainforestTestCase(unittest.TestCase):
 
         self.assertTrue(data['products'], True)
 
+    def test_404_sent_requesting_beyond_valid_page(self):
+        res = self.client().get("/products/9001")
+        data = json.loads(res.data)
 
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "resource not found")
 
 # Make the tests conveniently executable
 # I forgot to use this

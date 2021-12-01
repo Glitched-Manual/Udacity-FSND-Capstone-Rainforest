@@ -24,6 +24,7 @@ Results_PER_PAGE = 10
 # to paginate user and product data
 def paginate_data(request, selection):
     page = request.args.get("page", 1, type=int)
+    print(" page # " + str(page))
     start = (page - 1) * Results_PER_PAGE
     end = start + Results_PER_PAGE
 
@@ -44,7 +45,16 @@ def create_app(test_config=None):
     setup_db(app)
     CORS(app)
 
-    
+    # CORS Headers
+    @app.after_request
+    def after_request(response):
+        response.headers.add(
+            "Access-Control-Allow-Headers", "Content-Type,Authorization,true"
+        )
+        response.headers.add(
+            "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS"
+        )
+        return response 
  
 #APP = create_app()
 
