@@ -102,6 +102,7 @@ def create_app(test_config=None):
                         "error": 404,
                         "message": "resource not found"
                         }), 404
+                        
     '''
     @TODO implement error handler for 404
         error handler should conform to general task above
