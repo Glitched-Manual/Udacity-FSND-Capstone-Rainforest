@@ -117,7 +117,11 @@ class User(db.Model):
     def update(self):
         db.session.commit()
 
-
+    def format(self):
+        return {
+            "id": self.id,
+            "name": self.name            
+        }
 # Order
 """
 The class that contains all the orderItems for a users transaction
@@ -145,6 +149,12 @@ class Order(db.Model):
 
     def update(self):
         db.session.commit()
+
+    def format(self):
+        return {
+            "id": self.id,
+            "user_id": self.name            
+        }
 
 # Product
 """
@@ -175,6 +185,14 @@ class Product(db.Model):
 
     def update(self):
         db.session.commit()
+
+    def format(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "price": self.price,
+            "description": self.description
+        }
 
 # OrderItem
 """

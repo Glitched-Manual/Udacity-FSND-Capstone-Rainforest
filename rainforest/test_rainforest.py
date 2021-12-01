@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 import sys
 #print(sys.executable)
 #print(sys.modules)
-from app import create_app, setup_db
+from app import create_app
 from database import models
 
 # I need to use pytest or stick with unittest which ever works
@@ -43,6 +43,8 @@ class RainforestTestCase(unittest.TestCase):
         self.database_name = "rainforest_db"
         self.database_path = "postgresql://student:student@{}/{}".format(
             'localhost:5432', self.database_name)
+
+        self.sever_address = '127.0.0.1:5000'
 
         models.setup_db(self.app, self.database_path)
 
@@ -80,10 +82,9 @@ class RainforestTestCase(unittest.TestCase):
     """
 
     def test_get_products(self):
-
-        #self.product.insert()
-
+        
         res = self.client().get('/products')
+        
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)

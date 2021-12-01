@@ -38,18 +38,21 @@ def paginate_data(request, selection):
 
 
 def create_app(test_config=None):
-  # create and configure the app
-  app = Flask(__name__)
-  #setup_db only needs to be call here locally, because mange.py does not work locally
-  setup_db(app)
-  CORS(app)
+    # create and configure the app
+    app = Flask(__name__)
+    #setup_db only needs to be call here locally, because mange.py does not work locally
+    setup_db(app)
+    CORS(app)
 
-  return app
+    
  
-APP = create_app()
+#APP = create_app()
 
-if __name__ == '__main__':
-    APP.run(host='0.0.0.0', port=8080, debug=True)
+#if __name__ == '__main__':
+#    APP.run(host='0.0.0.0', port=8080, debug=True)
+
+#elif __name__ == 'app':
+#    app.run(host='0.0.0.0', port=8080, debug=True)
 
 
 #----------------------------------------------------------------------------#
@@ -57,67 +60,69 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------#
 
 
-@APP.route('/')
-def welcome_to_root():
-    return "Welcome to Rainforest! :>"
+    @app.route('/')
+    def welcome_to_root():
+        return "Welcome to Rainforest! :>"
 
-# get products
+    # get products
 
-@APP.route('/products')
-def get_products():
+    @app.route('/products')
+    def get_products():
 
-    all_products = Product.query.order_by(Product.id).all()
-    total_products = len(all_products)
+        all_products = Product.query.order_by(Product.id).all()
+        total_products = len(all_products)
 
-    if total_products <= 0:
-        abort(404)
+        if total_products <= 0:
+            abort(404)
 
-    selected_products = paginate_data(request, all_products)
+        selected_products = paginate_data(request, all_products)
 
-    return jsonify({
-        'success': True,
-        'products': selected_products,
-        'total_products': total_products
+        return jsonify({
+            'success': True,
+            'products': selected_products,
+            'total_products': total_products
 
-    })
-
-
-@APP.errorhandler(404)
-def unprocessable(error):
-    return jsonify({
-                    "success": False,
-                    "error": 404,
-                    "message": "resource not found"
-                    }), 404
-'''
-@TODO implement error handler for 404
-    error handler should conform to general task above
-'''
-@APP.errorhandler(422)
-def unprocessable(error):
-    return jsonify({
-        "success": False,
-        "error": 422,
-        "message": "unprocessable"
-    }), 422
-
-'''
-@TODO implement error handler for AuthError
-    error handler should conform to general task above
-'''
-@APP.errorhandler(401)
-def unprocessable(error):
-    return jsonify({
-                    "success": False,
-                    "error": 401,
-                    "message": "resource not found"
-                    }), 401
+        })
 
 
-@APP.errorhandler(AuthError)
-def handle_auth_error(ex):
-    return jsonify({
-                    "success": False,
-                    "error": ex.status_code,
-                    "message": ex.error
-                    }), ex.status_code
+    @app.errorhandler(404)
+    def unprocessable(error):
+        return jsonify({
+                        "success": False,
+                        "error": 404,
+                        "message": "resource not found"
+                        }), 404
+    '''
+    @TODO implement error handler for 404
+        error handler should conform to general task above
+    '''
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": "unprocessable"
+        }), 422
+
+    '''
+    @TODO implement error handler for AuthError
+        error handler should conform to general task above
+    '''
+    @app.errorhandler(401)
+    def unprocessable(error):
+        return jsonify({
+                        "success": False,
+                        "error": 401,
+                        "message": "resource not found"
+                        }), 401
+
+
+    @app.errorhandler(AuthError)
+    def handle_auth_error(ex):
+        return jsonify({
+                        "success": False,
+                        "error": ex.status_code,
+                        "message": ex.error
+                        }), ex.status_code
+
+    return app
