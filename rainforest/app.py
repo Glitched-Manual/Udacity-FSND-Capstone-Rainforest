@@ -66,7 +66,7 @@ def create_app(test_config=None):
 
 
 #----------------------------------------------------------------------------#
-#Endpoints
+# #Endpoints
 #----------------------------------------------------------------------------#
 
 
@@ -121,10 +121,49 @@ def create_app(test_config=None):
 
             product_catalog = Product.query.order_by(Product.id).all()
             displayed_products = paginate_data(request, product_catalog)
+
+
+            return jsonify(
+                {
+                    "success": True,
+                    "created": product.id,
+                    "products": displayed_products,
+                    "total_products": len(product_catalog)
+                }
+            )
         except:
             abort(422)
         
-        return ':<'
+
+    @app.route('/products/<int:product_id>', methods=['DELETE'])
+    def delete_product(product_id):
+        try:
+            product = Product.query.filter(Product.id == product_id).all()
+
+            if product is None:
+                abort(404)
+
+            product.delete()
+
+            product_catalog = Product.query.order_by(Product.id).all()
+            displayed_products = paginate_data(request, product_catalog)
+
+
+            return jsonify(
+                {
+                    "success": True,
+                    "deleted": product.id,
+                    "products": displayed_products,
+                    "total_products": len(product_catalog)
+                }
+            )
+        except:
+            abort(422)
+
+#----------------------------------------------------------------------------#
+# Error Handling
+#----------------------------------------------------------------------------#    
+    
 
     @app.errorhandler(404)
     def unprocessable(error):
