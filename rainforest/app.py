@@ -93,7 +93,38 @@ def create_app(test_config=None):
             'total_products': total_products
 
         })
+    
+    # post products
 
+    """
+    name
+- description
+- price
+    """
+
+    @app.route('/products', methods=['POST'])
+    def create_product():
+        body = request.get_json()
+
+        new_product_name = body.get("name", None)
+        new_product_description = body.get("description", None)
+        new_product_price = body.get("price", None)
+
+        try:
+            product = Product(
+                name=new_product_name,
+                description=new_product_description,
+                price=new_product_price
+            )
+
+            product.insert()
+
+            product_catalog = Product.query.order_by(Product.id).all()
+            displayed_products = paginate_data(request, product_catalog)
+        except:
+            abort(422)
+        
+        return ':<'
 
     @app.errorhandler(404)
     def unprocessable(error):

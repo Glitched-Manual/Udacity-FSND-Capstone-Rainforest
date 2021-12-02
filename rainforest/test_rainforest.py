@@ -100,6 +100,12 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data["success"], False)
         self.assertEqual(data["message"], "resource not found")
 
+    
+
+    #--------------------------------------------------
+    # Users
+    #--------------------------------------------------
+
 # Make the tests conveniently executable
 # I forgot to use this
 if __name__ == "__main__":
