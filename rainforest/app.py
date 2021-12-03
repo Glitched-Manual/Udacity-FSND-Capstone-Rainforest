@@ -28,8 +28,8 @@ def paginate_data(request, selection):
     start = (page - 1) * Results_PER_PAGE
     end = start + Results_PER_PAGE
 
-    data_selction = [data.format() for data in selection]
-    selected_data = data_selction[start:end]
+    data_selection = [data.format() for data in selection]
+    selected_data = data_selection[start:end]
 
     return selected_data
 
@@ -94,6 +94,20 @@ def create_app(test_config=None):
 
         })
     
+    @app.route('/products/<product_id>')
+    def get_product_by_id(product_id):
+        product = Product.query.get(product_id)
+
+        if product is None:
+            abort(404)
+
+        return jsonify({
+            'success': True,
+            'product': product.format()           
+
+        })
+
+
     # post products
 
     """
@@ -103,7 +117,8 @@ def create_app(test_config=None):
     """
 
     @app.route('/products', methods=['POST'])
-    def create_product():
+    @requires_auth('post:products')
+    def create_product(payload):
         body = request.get_json()
 
         new_product_name = body.get("name", None)
@@ -136,7 +151,8 @@ def create_app(test_config=None):
         
 
     @app.route('/products/<int:product_id>', methods=['DELETE'])
-    def delete_product(product_id):
+    @requires_auth('delete:products')
+    def delete_product(payload,product_id):
         try:
             product = Product.query.filter(Product.id == product_id).all()
 

@@ -20,7 +20,7 @@ Includes tests demonstrating role-based access control, at least two per role.
 
 Roles:
 
-Clerk, Manager
+Staff, Owner
 
 """
 
@@ -43,9 +43,10 @@ class RainforestTestCase(unittest.TestCase):
         self.database_name = "rainforest_db"
         self.database_path = "postgresql://student:student@{}/{}".format(
             'localhost:5432', self.database_name)
-
-        self.sever_address = '127.0.0.1:5000'
-
+         
+        self.staff_token = os.environ['STAFF_TOKEN']
+        self.owner_token = os.environ['OWNER_TOKEN']
+        
         models.setup_db(self.app, self.database_path)
 
         # binds the app to the current context
@@ -78,7 +79,7 @@ class RainforestTestCase(unittest.TestCase):
     """
 
     """
-    / product test
+     product test
     """
 
     def test_get_products(self):
@@ -95,12 +96,29 @@ class RainforestTestCase(unittest.TestCase):
     def test_404_sent_requesting_beyond_valid_page(self):
         res = self.client().get("/products/9001")
         data = json.loads(res.data)
-
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data["success"], False)
         self.assertEqual(data["message"], "resource not found")
 
     
+    def test_create_products(self):
+
+        """res = self.client().post('/products', headers={
+            'Authorization': "Bearer {}".format(self.owner_token)},
+            json={'name': self.product.name, 'description': self.product.description,'price': self.product.price})"""
+       
+        res = self.client().post('/products', headers={
+            'Authorization': "Bearer {}".format(self.owner_token)},
+            json=self.product.format())
+
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['created', True])
+        self.assertTrue(data['products', True])
+        self.assertTrue(data['total_products', True])
+        
 
     #--------------------------------------------------
     # Users
