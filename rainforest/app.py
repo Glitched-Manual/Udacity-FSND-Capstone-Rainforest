@@ -12,8 +12,7 @@ elif  __name__ == 'app':
     try:
         
         from database.models import db_drop_and_create_all, setup_db, User, Order, OrderItem, Product
-        from auth.auth import AuthError, requires_auth
-        
+        from auth.auth import AuthError, requires_auth        
 
     except:
         pass
@@ -23,8 +22,7 @@ Results_PER_PAGE = 10
 
 # to paginate user and product data
 def paginate_data(request, selection):
-    page = request.args.get("page", 1, type=int)
-    print(" page # " + str(page))
+    page = request.args.get("page", 1, type=int)    
     start = (page - 1) * Results_PER_PAGE
     end = start + Results_PER_PAGE
 
