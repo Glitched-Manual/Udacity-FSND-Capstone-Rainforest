@@ -8,7 +8,7 @@ import os
 # create Auth0 setup for rainforest
 AUTH0_DOMAIN = 'manualdev.us.auth0.com'
 ALGORITHMS = 'RS256'
-API_AUDIENCE = 'coffee_api'
+API_AUDIENCE = 'rainforest-api'
 
 ## AuthError Exception
 '''

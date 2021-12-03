@@ -115,9 +115,9 @@ class RainforestTestCase(unittest.TestCase):
         print(data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(data['created', True])
-        self.assertTrue(data['products', True])
-        self.assertTrue(data['total_products', True])
+        self.assertTrue(data['created'], True)
+        self.assertTrue(data['products'], True)
+        self.assertTrue(data['total_products'], True)
         
 
     #--------------------------------------------------
