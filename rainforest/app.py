@@ -144,7 +144,7 @@ def create_app(test_config=None):
     @requires_auth('delete:products')
     def delete_product(payload,product_id):
         try:
-            product = Product.query.filter(Product.id == product_id).all()
+            product = Product.query.get(product_id)
 
             if product is None:
                 abort(404)
@@ -164,6 +164,7 @@ def create_app(test_config=None):
                 }
             )
         except:
+            print(sys.exc_info())
             abort(422)
 
 #----------------------------------------------------------------------------#

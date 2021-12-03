@@ -67,7 +67,7 @@ def get_token_auth_header():
 def check_permissions(permission, payload):
     # raise an AuthError if permissions are not included in the payload
     #print(permission)
-    #print(payload)
+    #print(payload['permissions'])
     if 'permissions' in payload is False:
         raise AuthError({
                         'code': 'invalid_claims',
@@ -79,7 +79,7 @@ def check_permissions(permission, payload):
             'code': 'unauthorized',
             'description': 'permission not found'
         }, 403)
-    # 
+    
     return True
 
 def verify_decode_jwt(token):
@@ -137,16 +137,7 @@ def verify_decode_jwt(token):
                 'description': 'Unable to find the appropriate key.'
             }, 400)
 
-'''
-@TODO implement @requires_auth(permission) decorator method
-    @INPUTS
-        permission: string permission (i.e. 'post:drink')
 
-    it should use the get_token_auth_header method to get the token
-    it should use the verify_decode_jwt method to decode the jwt
-    it should use the check_permissions method validate claims and check the requested permission
-    return the decorator which passes the decoded payload to the decorated method
-'''
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)

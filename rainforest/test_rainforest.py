@@ -43,9 +43,10 @@ class RainforestTestCase(unittest.TestCase):
         self.database_name = "rainforest_db"
         self.database_path = "postgresql://student:student@{}/{}".format(
             'localhost:5432', self.database_name)
-         
-        self.staff_token = os.environ['STAFF_TOKEN']
+
         self.owner_token = os.environ['OWNER_TOKEN']
+        self.staff_token = os.environ['STAFF_TOKEN']
+        
         
         models.setup_db(self.app, self.database_path)
 
@@ -110,6 +111,7 @@ class RainforestTestCase(unittest.TestCase):
         data = json.loads(res.data)        
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+
         self.assertTrue(data['created'], True)
         self.assertTrue(data['products'], True)
         self.assertTrue(data['total_products'], True)
@@ -127,19 +129,41 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data["message"], "unprocessable")        
 
-
-    #invalid auth product create fail
-
+    #
+    #invalid auth permission product create fail
+    #
     def test_create_product_invalid_auth_error(self):        
+        # the user with the staff role cannot create a new product
         res = self.client().post('/products', headers={
             'Authorization': "Bearer {}".format(self.staff_token)},
             json=self.product.format())
 
-        data = json.loads(res.data)              
+        data = json.loads(res.data)   
+        #print(data)           
         self.assertEqual(res.status_code, 403)
-        self.assertEqual(data['message'], "Forbidden")
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message']['description'], 'permission not found')
+        self.assertEqual(data['message']['code'], 'unauthorized')
         
 
+    def test_delete_product(self):
+
+        sample_product = models.Product(name='skittles', description='bag of sweet candy', price=3.99)
+        sample_product.insert()
+
+        sample_id = sample_product.id
+
+        res = self.client().delete(f'/products/{sample_id}',headers={
+            'Authorization': "Bearer {}".format(self.owner_token)})
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+        self.assertEqual(data['deleted'], sample_id)
+        self.assertTrue(sample_product, None)
+    
     #--------------------------------------------------
     # Users
     #--------------------------------------------------
