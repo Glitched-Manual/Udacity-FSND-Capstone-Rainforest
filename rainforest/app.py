@@ -7,13 +7,13 @@ from flask_cors import CORS, cross_origin
 if __name__ == 'rainforest.app':    
     from .database.models import db_drop_and_create_all, setup_db, User, Order, OrderItem, Product
     from .auth.auth import AuthError, requires_auth
-    #print("__name__ == 'rainforest.app'")
+    
 elif  __name__ == 'app':
     try:
-        #print("xxxxxxxx __name__ :" + __name__)
+        
         from database.models import db_drop_and_create_all, setup_db, User, Order, OrderItem, Product
         from auth.auth import AuthError, requires_auth
-        #print("__name__ != 'rainforest.app'")
+        
 
     except:
         pass
@@ -55,15 +55,6 @@ def create_app(test_config=None):
             "Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS"
         )
         return response 
- 
-#APP = create_app()
-
-#if __name__ == '__main__':
-#    APP.run(host='0.0.0.0', port=8080, debug=True)
-
-#elif __name__ == 'app':
-#    app.run(host='0.0.0.0', port=8080, debug=True)
-
 
 #----------------------------------------------------------------------------#
 # #Endpoints
@@ -110,12 +101,6 @@ def create_app(test_config=None):
 
     # post products
 
-    """
-    name
-- description
-- price
-    """
-
     @app.route('/products', methods=['POST'])
     @requires_auth('post:products')
     def create_product(payload):
@@ -124,6 +109,13 @@ def create_app(test_config=None):
         new_product_name = body.get("name", None)
         new_product_description = body.get("description", None)
         new_product_price = body.get("price", None)
+
+
+        product_attributes =[new_product_name,new_product_description,new_product_price]
+
+        for attr in product_attributes:
+            if attr is None:
+                abort(422)
 
         try:
             product = Product(
@@ -180,6 +172,17 @@ def create_app(test_config=None):
 # Error Handling
 #----------------------------------------------------------------------------#    
     
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({"success": False, "error": 400, "message": "bad request"}), 400
+
+    @app.errorhandler(401)
+    def unprocessable(error):
+        return jsonify({
+                        "success": False,
+                        "error": 401,
+                        "message": "resource not found"
+                        }), 401
 
     @app.errorhandler(404)
     def unprocessable(error):
@@ -189,10 +192,7 @@ def create_app(test_config=None):
                         "message": "resource not found"
                         }), 404
                         
-    '''
-    @TODO implement error handler for 404
-        error handler should conform to general task above
-    '''
+    
     @app.errorhandler(422)
     def unprocessable(error):
         return jsonify({
@@ -201,18 +201,7 @@ def create_app(test_config=None):
             "message": "unprocessable"
         }), 422
 
-    '''
-    @TODO implement error handler for AuthError
-        error handler should conform to general task above
-    '''
-    @app.errorhandler(401)
-    def unprocessable(error):
-        return jsonify({
-                        "success": False,
-                        "error": 401,
-                        "message": "resource not found"
-                        }), 401
-
+        
 
     @app.errorhandler(AuthError)
     def handle_auth_error(ex):

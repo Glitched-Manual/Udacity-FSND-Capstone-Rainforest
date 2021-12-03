@@ -102,11 +102,7 @@ class RainforestTestCase(unittest.TestCase):
 
     
     def test_create_products(self):
-
-        """res = self.client().post('/products', headers={
-            'Authorization': "Bearer {}".format(self.owner_token)},
-            json={'name': self.product.name, 'description': self.product.description,'price': self.product.price})"""
-       
+               
         res = self.client().post('/products', headers={
             'Authorization': "Bearer {}".format(self.owner_token)},
             json=self.product.format())
@@ -119,6 +115,22 @@ class RainforestTestCase(unittest.TestCase):
         self.assertTrue(data['products'], True)
         self.assertTrue(data['total_products'], True)
         
+    #invalid product attributes fail
+
+    def test_422_create_products_fail(self):
+        res = self.client().post('/products', headers={
+            'Authorization': "Bearer {}".format(self.owner_token)},
+            json={'name': self.product.name, 'description': self.product.description})
+
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data["message"], "unprocessable")        
+
+
+    #invalid auth product create fail
+
 
     #--------------------------------------------------
     # Users
