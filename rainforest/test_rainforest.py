@@ -163,7 +163,25 @@ class RainforestTestCase(unittest.TestCase):
 
         self.assertEqual(data['deleted'], sample_id)
         self.assertTrue(sample_product, None)
-    
+
+
+    def test_delete_product_auth_error(self):
+        sample_product = models.Product(name='mars bar', description='a chocolate bar', price=2.99)
+        sample_product.insert()
+
+        sample_id = sample_product.id
+
+        res = self.client().delete(f'/products/{sample_id}',headers={
+            'Authorization': "Bearer {}".format(self.staff_token)})
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 403)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message']['description'], 'permission not found')
+        self.assertEqual(data['message']['code'], 'unauthorized')
+        self.assertTrue(sample_product, True)
+
     #--------------------------------------------------
     # Users
     #--------------------------------------------------
