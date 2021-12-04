@@ -215,6 +215,7 @@ def create_app(test_config=None):
 #----------------------------------------------------------------------------# 
     
     @app.route('/users')
+    @requires_auth('get:users')
     def get_users():
         all_users = User.query.order_by(User.id).all()
 
@@ -231,7 +232,20 @@ def create_app(test_config=None):
             'total_users': total_users
         })
         
+    @app.route('/users/<int:user_id>')
+    @requires_auth('get:users')
+    def get_user_by_id(user_id):
+        user = User.query.get(user_id)
 
+        if user is None:
+            abort(404)
+
+        return jsonify({
+            'success': True,
+            'user': user.format()
+        })
+
+    #create
 
 #----------------------------------------------------------------------------#
 # Error Handling
