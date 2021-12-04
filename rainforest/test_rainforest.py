@@ -164,6 +164,7 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['deleted'], sample_id)
         self.assertTrue(sample_product, None)
 
+
     def test_delete_product_out_of_bounds(self):                
 
         res = self.client().delete(f'/products/1080',headers={
@@ -175,9 +176,7 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "unprocessable")
 
-        
-        
-
+    
     def test_delete_product_auth_error(self):
         sample_product = models.Product(name='mars bar', description='a chocolate bar', price=2.99)
         sample_product.insert()
@@ -195,9 +194,58 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['message']['code'], 'unauthorized')
         self.assertTrue(sample_product, True)
 
+
+    def test_patch_product(self):
+        sample_product = models.Product(name='snickers bar', description='a chocolate bar', price=2.99)
+        sample_product.insert()
+
+        product_id = sample_product.id
+
+        new_name = 'hersheys bar'
+        new_description = "A creamy milk chocolate bar"
+        new_price = 1.10
+
+        res = self.client().patch(f'/products/{product_id}',headers={
+            'Authorization': "Bearer {}".format(self.owner_token)}, json={
+                'name': new_name, 'description': new_description, 'price': new_price
+            })
+
+        data = json.loads(res.data)        
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['product_name'], new_name)
+        self.assertEqual(data['product_description'], new_description)
+        self.assertEqual(data['product_price'], new_price)
+
+    def test_422_patch_product_invailid_failure(self):
+        sample_product = models.Product(name='snickers bar', description='a chocolate bar', price=2.99)
+        sample_product.insert()
+
+        product_id = sample_product.id
+
+        new_name = 'hersheys bar'
+        new_description = "A creamy milk chocolate bar"
+        #wrong value type
+        new_price = '1.10' 
+
+        res = self.client().patch(f'/products/{product_id}',headers={
+            'Authorization': "Bearer {}".format(self.owner_token)}, json={
+                'name': new_name, 'description': new_description, 'price': new_price
+            })
+
+        data = json.loads(res.data)    
+        
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "unprocessable")
+
     #--------------------------------------------------
     # Users
     #--------------------------------------------------
+
+
+    
 
 # Make the tests conveniently executable
 # I forgot to use this

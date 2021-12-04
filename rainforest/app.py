@@ -194,7 +194,19 @@ def create_app(test_config=None):
                 product.description = new_product_description
 
             if new_product_price:
+                
+                if type(new_product_price) is not type(1.1):
+                    abort(422)
                 product.price = new_product_price
+
+
+            return jsonify({
+                'success': True,
+                'patched': product_id,
+                'product_name': product.name,
+                'product_description': product.description,
+                'product_price': product.price
+            })
         except:
             abort(422)
         
