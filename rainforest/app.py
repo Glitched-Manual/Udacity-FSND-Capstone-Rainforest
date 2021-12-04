@@ -76,6 +76,11 @@ def create_app(test_config=None):
 
         selected_products = paginate_data(request, all_products)
 
+        # test to see if any products exist within the selection
+
+        if len(selected_products) == 0:
+            abort(404)
+
         return jsonify({
             'success': True,
             'products': selected_products,
@@ -225,6 +230,9 @@ def create_app(test_config=None):
         total_users = len(all_users)
 
         paginated_user_list = paginate_data(request,all_users)
+
+        if len(paginated_user_list) == 0:
+            abort(404)
 
         return jsonify({
             'success': True,

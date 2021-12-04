@@ -94,7 +94,14 @@ class RainforestTestCase(unittest.TestCase):
 
         self.assertTrue(data['products'], True)
 
-    def test_404_sent_requesting_beyond_valid_page(self):
+    def test_404_product_page_not_found(self):
+        res = self.client().get("/products?page=1000")
+        data = json.loads(res.data)        
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "resource not found")
+
+    def test_404_product_not_found_error(self):
         res = self.client().get("/products/9001")
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
@@ -245,12 +252,24 @@ class RainforestTestCase(unittest.TestCase):
     #--------------------------------------------------
 
     def test_get_users(self):
-        res = self.client().get('/users')
+        res = self.client().get('/users', headers={
+            'Authorization': "Bearer {}".format(self.staff_token)}
+        )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
         self.assertTrue(data['users'], True)
         self.assertTrue(data['total_users'], True)
+
+    def test_page_of_users_out_of_bounds_error(self):
+        res = self.client().get('/users?page=987654321', headers={
+            'Authorization': "Bearer {}".format(self.staff_token)}
+        )
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "resource not found")
 
 
 
