@@ -244,8 +244,15 @@ class RainforestTestCase(unittest.TestCase):
     # Users
     #--------------------------------------------------
 
+    def test_get_users(self):
+        res = self.client().get('/users')
+        data = json.loads(res.data)
 
-    
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['users'], True)
+        self.assertTrue(data['total_users'], True)
+
+
 
 # Make the tests conveniently executable
 # I forgot to use this

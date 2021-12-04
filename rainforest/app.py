@@ -194,7 +194,7 @@ def create_app(test_config=None):
                 product.description = new_product_description
 
             if new_product_price:
-                
+
                 if type(new_product_price) is not type(1.1):
                     abort(422)
                 product.price = new_product_price
@@ -210,9 +210,26 @@ def create_app(test_config=None):
         except:
             abort(422)
         
+#----------------------------------------------------------------------------#
+# Users
+#----------------------------------------------------------------------------# 
+    
+    @app.route('/users')
+    def get_users():
+        all_users = User.query.order_by(User.id).all()
 
+        if all_users is None:
+            abort(404)
 
-        
+        total_users = len(all_users)
+
+        paginated_user_list = paginate_data(request,all_users)
+
+        return jsonify({
+            'success': True,
+            'users': paginated_user_list,
+            'total_users': total_users
+        })
         
 
 
