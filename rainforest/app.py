@@ -270,7 +270,8 @@ def create_app(test_config=None):
 
             return jsonify({
                 'success': True,
-                'created': new_user.id
+                'created': new_user.id,
+                'user': new_user.format()
 
             })
         except:

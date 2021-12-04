@@ -247,9 +247,9 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "unprocessable")
 
-    #--------------------------------------------------
-    # Users
-    #--------------------------------------------------
+#--------------------------------------------------
+# Users
+#--------------------------------------------------
 
     def test_get_users(self):
         res = self.client().get('/users', headers={
@@ -270,6 +270,40 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "resource not found")
+
+    
+    def test_get_users_no_permission_failure(self):
+        #shows that the permission 'get:users' is needed to access user data
+        res = self.client().get('/users')
+        data = json.loads(res.data)        
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message']['description'], 'Authorization header is expected.')
+        self.assertEqual(data['message']['code'], 'authorization_header_missing')
+
+    def test_create_user(self):
+
+        new_username = 'false_bell'
+        res = self.client().post('/users', headers={
+            'Authorization': "Bearer {}".format(self.staff_token)}, json={'name': new_username } )
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['created'], True)
+        self.assertEqual(data['user']['name'], new_username)
+
+    def test_create_user_failure(self):
+        new_username = None
+        res = self.client().post('/users', headers={
+            'Authorization': "Bearer {}".format(self.staff_token)}, json={'name': new_username } )
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
+
 
 
 
