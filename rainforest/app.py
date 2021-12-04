@@ -216,7 +216,7 @@ def create_app(test_config=None):
     
     @app.route('/users')
     @requires_auth('get:users')
-    def get_users():
+    def get_users(payload):
         all_users = User.query.order_by(User.id).all()
 
         if all_users is None:
@@ -234,7 +234,7 @@ def create_app(test_config=None):
         
     @app.route('/users/<int:user_id>')
     @requires_auth('get:users')
-    def get_user_by_id(user_id):
+    def get_user_by_id(payload,user_id):
         user = User.query.get(user_id)
 
         if user is None:
@@ -245,7 +245,89 @@ def create_app(test_config=None):
             'user': user.format()
         })
 
-    #create
+    @app.route('/users', methods=['POST'])
+    @requires_auth('post:users')
+    def create_user(payload):
+        
+        body = request.get_json()
+        new_user_name = body.get("name", None)
+
+        if new_user_name is None:
+            abort(422)
+
+        try:
+
+            new_user = User(name=new_user_name)
+            new_user.insert()
+
+            return jsonify({
+                'success': True,
+                'created': new_user.id
+
+            })
+        except:
+            abort(422)
+
+    @app.route('/users/<int:user_id>', methods=['DELETE'])
+    @requires_auth('delete:users')
+    def delete_user(payload, user_id):
+        try:
+            user = User.query.get(user_id)
+            
+            if user is None:
+                abort(404)
+
+            user.delete()
+
+            return jsonify({
+                'success': True,
+                'deleted': user_id
+            })
+
+        except:
+            abort(422)
+    
+#----------------------------------------------------------------------------#
+# Orders
+#----------------------------------------------------------------------------#
+
+    @app.route('/orders')
+    @requires_auth('get:orders')
+    def get_orders(payload):
+        
+        try:
+            orders = Order.query.order_by(Order.id).all()
+
+            if orders is None:
+                abort(404)
+            total_orders = len(orders)
+            selected_orders = paginate_data(request, orders)
+
+            return jsonify({
+                'success': True,
+                'orders': selected_orders,
+                'total_orders': total_orders
+
+            })
+        except:
+            abort(422)
+
+    @app.route('/orders/<int:order_id>')
+    @requires_auth('get:orders')
+    def get_order_by_id(payload, order_id):
+        try:
+            order = Order.query.get(order_id)
+
+            if order is None:
+                abort(404)
+            
+            return jsonify({
+                'success': True,
+                'order': order.format()
+            })
+        
+        except:
+            abort(422)
 
 #----------------------------------------------------------------------------#
 # Error Handling
