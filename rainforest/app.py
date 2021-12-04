@@ -164,8 +164,45 @@ def create_app(test_config=None):
                 }
             )
         except:
-            print(sys.exc_info())
+            #print(sys.exc_info())
             abort(422)
+
+    @app.route('/products/<int:product_id>', methods=['PATCH'])
+    @requires_auth('patch:products')
+    def patch_product(payload,product_id):
+
+        try:
+            if product_id is None:
+                abort(422)
+
+            product = Product.query.get(product_id)
+
+            if product is None:
+                abort(404)
+
+            body = request.get_json()
+
+            new_product_name = body.get("name", None)
+            new_product_description = body.get("description", None)
+            new_product_price = body.get("price", None)
+
+
+            if new_product_name:
+                product.name = new_product_name
+
+            if new_product_description:
+                product.description = new_product_description
+
+            if new_product_price:
+                product.price = new_product_price
+        except:
+            abort(422)
+        
+
+
+        
+        
+
 
 #----------------------------------------------------------------------------#
 # Error Handling

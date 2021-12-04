@@ -164,6 +164,19 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['deleted'], sample_id)
         self.assertTrue(sample_product, None)
 
+    def test_delete_product_out_of_bounds(self):                
+
+        res = self.client().delete(f'/products/1080',headers={
+            'Authorization': "Bearer {}".format(self.owner_token)})
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "unprocessable")
+
+        
+        
 
     def test_delete_product_auth_error(self):
         sample_product = models.Product(name='mars bar', description='a chocolate bar', price=2.99)
