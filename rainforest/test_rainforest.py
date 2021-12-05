@@ -58,7 +58,7 @@ class RainforestTestCase(unittest.TestCase):
             self.db.create_all()
             # store values for tests one of each User, Order, OrderItem, Product
             self.user = models.User(
-                name='chris condo'                
+                name= "chris condo"                
             )
             self.product = models.Product(
                 name = "Test Nova TX7",
@@ -295,6 +295,30 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['message']['description'], 'Authorization header is expected.')
         self.assertEqual(data['message']['code'], 'authorization_header_missing')
 
+    def test_get_user_by_id(self):
+                
+        self.user.insert()
+        new_user_id = self.user.id
+
+        res = self.client().get('/users/' + str(new_user_id), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)}
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['user']['id'], new_user_id)
+
+    def test_get_user_by_id_out_of_bounds_failure(self):
+        res = self.client().get('/users' + str(500000), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)}
+        )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "resource not found")
+
     def test_create_user(self):
 
         new_username = 'false_bell'
@@ -324,7 +348,9 @@ class RainforestTestCase(unittest.TestCase):
         self.user.insert()
         new_user_id = self.user.id
 
-        res = self.client().delete('/users/new_user_id')
+        res = self.client().delete('/users/' + str(new_user_id),
+         headers={
+            'Authorization': "Bearer {}".format(self.staff_token)})
 
         data = json.loads(res.data)
 

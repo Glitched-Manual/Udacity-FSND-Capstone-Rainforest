@@ -294,6 +294,7 @@ def create_app(test_config=None):
             })
 
         except:
+            print(sys.exc_info())
             abort(422)
     
 #----------------------------------------------------------------------------#
