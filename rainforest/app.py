@@ -222,36 +222,44 @@ def create_app(test_config=None):
     @app.route('/users')
     @requires_auth('get:users')
     def get_users(payload):
-        all_users = User.query.order_by(User.id).all()
 
-        if all_users is None:
-            abort(404)
+        try:
+            all_users = User.query.order_by(User.id).all()
 
-        total_users = len(all_users)
+            if all_users is None:
+                abort(404)
 
-        paginated_user_list = paginate_data(request,all_users)
+            total_users = len(all_users)
 
-        if len(paginated_user_list) == 0:
-            abort(404)
+            paginated_user_list = paginate_data(request,all_users)
 
-        return jsonify({
-            'success': True,
-            'users': paginated_user_list,
-            'total_users': total_users
-        })
+            if len(paginated_user_list) == 0:
+                abort(404)
+
+            return jsonify({
+                'success': True,
+                'users': paginated_user_list,
+                'total_users': total_users
+            })
+        except:
+            abort(422)
         
     @app.route('/users/<int:user_id>')
     @requires_auth('get:users')
     def get_user_by_id(payload,user_id):
-        user = User.query.get(user_id)
+        
+        try:
+            user = User.query.get(user_id)
 
-        if user is None:
-            abort(404)
+            if user is None:
+                abort(404)
 
-        return jsonify({
-            'success': True,
-            'user': user.format()
-        })
+            return jsonify({
+                'success': True,
+                'user': user.format()
+            })
+        except:
+            abort(422)
 
     @app.route('/users', methods=['POST'])
     @requires_auth('post:users')
@@ -292,7 +300,7 @@ def create_app(test_config=None):
                 'success': True,
                 'deleted': user_id
             })
-
+        
         except:
             print(sys.exc_info())
             abort(422)

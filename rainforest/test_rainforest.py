@@ -282,9 +282,9 @@ class RainforestTestCase(unittest.TestCase):
             'Authorization': "Bearer {}".format(self.staff_token)}
         )
         data = json.loads(res.data)
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], "resource not found")
+        self.assertEqual(data['message'], "unprocessable")
 
     
     def test_get_users_no_permission_failure(self):
@@ -356,10 +356,21 @@ class RainforestTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted'], new_user_id)
 
-    
+    def test_delete_user_422_failure(self):
+
+        res = self.client().delete('/users/' + str(700000),
+         headers={
+            'Authorization': "Bearer {}".format(self.staff_token)})
+
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "unprocessable")
+
 
 # Make the tests conveniently executable
 # I forgot to use this
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main() 
