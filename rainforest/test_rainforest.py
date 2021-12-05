@@ -101,6 +101,21 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data["success"], False)
         self.assertEqual(data["message"], "resource not found")
 
+    def test_get_product_by_id(self):
+
+        self.product.insert()
+
+        product_id = self.product.id
+        res = self.client().get('/products/'+ str(product_id))
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual(data['product']['id'], product_id)
+
+
+
     def test_404_product_not_found_error(self):
         res = self.client().get("/products/9001")
         data = json.loads(res.data)
@@ -304,8 +319,19 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
 
+    def test_delete_user(self):
 
+        self.user.insert()
+        new_user_id = self.user.id
 
+        res = self.client().delete('/users/new_user_id')
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    
 
 # Make the tests conveniently executable
 # I forgot to use this
