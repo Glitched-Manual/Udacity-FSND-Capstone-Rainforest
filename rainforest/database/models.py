@@ -153,7 +153,7 @@ class Order(db.Model):
     def format(self):
         return {
             "id": self.id,
-            "user_id": self.name            
+            "user_id": self.user_id            
         }
 
 # Product
@@ -220,3 +220,10 @@ class OrderItem(db.Model):
 
     def update(self):
         db.session.commit()
+
+    def format(self):
+        return {
+            'id': self.id,
+            'order_id': self.order_id,
+            'product_id': self.product_id
+        }

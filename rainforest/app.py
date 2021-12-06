@@ -2,6 +2,7 @@ import os ,sys
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
+from sqlalchemy.sql.sqltypes import REAL
 
 
 if __name__ == 'rainforest.app':    
@@ -300,9 +301,8 @@ def create_app(test_config=None):
                 'success': True,
                 'deleted': user_id
             })
-        
-        except:
-            print(sys.exc_info())
+
+        except:            
             abort(422)
     
 #----------------------------------------------------------------------------#
@@ -318,8 +318,12 @@ def create_app(test_config=None):
 
             if orders is None:
                 abort(404)
+                
             total_orders = len(orders)
             selected_orders = paginate_data(request, orders)
+
+            if len(selected_orders) == 0:
+                abort(404)
 
             return jsonify({
                 'success': True,
@@ -328,6 +332,7 @@ def create_app(test_config=None):
 
             })
         except:
+            print(sys.exc_info())
             abort(422)
 
     @app.route('/orders/<int:order_id>')
@@ -341,9 +346,27 @@ def create_app(test_config=None):
             
             return jsonify({
                 'success': True,
-                'order': order.format()
+                'order': order.format()               
             })
         
+        except:
+            abort(422)
+
+    @app.route('/orders', methods=['POST'])
+    @requires_auth('post:orders')
+    def create_order(payload):
+        try:
+            smile = ";)"
+
+        except:
+            abort(422)
+
+    @app.route('/orders/<int:order_id>', methods=['DELETE'])
+    @requires_auth('delete:orders')
+    def delete_order(payload,order_id):
+        try:
+            smile = ";)"
+
         except:
             abort(422)
 

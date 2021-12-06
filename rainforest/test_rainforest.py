@@ -291,6 +291,8 @@ class RainforestTestCase(unittest.TestCase):
         #shows that the permission 'get:users' is needed to access user data
         res = self.client().get('/users')
         data = json.loads(res.data)        
+        
+        self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message']['description'], 'Authorization header is expected.')
         self.assertEqual(data['message']['code'], 'authorization_header_missing')
@@ -369,6 +371,34 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "unprocessable")
 
+    def test_delete_user_no_auth_failure(self):
+        self.user.insert()
+        new_user_id = self.user.id
+
+        res = self.client().delete('/users/' + str(new_user_id))
+        data = json.loads(res.data)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message']['description'], 'Authorization header is expected.')
+        self.assertEqual(data['message']['code'], 'authorization_header_missing')
+
+#----------------------------------------------------------------------------#
+# Orders
+#----------------------------------------------------------------------------#
+
+    def test_get_orders(self):
+        res = self.client().get('/orders', headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+        })
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['orders'], True)
+        self.assertTrue(data['total_orders'], True)
+
+    #def test_get_orders_out_of_bounds_fail(self):
+    #    res = self.client().get()
 
 # Make the tests conveniently executable
 # I forgot to use this
