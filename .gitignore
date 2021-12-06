@@ -1,3 +1,3 @@
 rainforest/database/.env
-rainforest/__pycache__/
-rainforest/database/__pycache__/
+/rainforest/__pycache__/*
+/rainforest/database/__pycache__/*
