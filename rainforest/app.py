@@ -170,7 +170,6 @@ def create_app(test_config=None):
                 }
             )
         except:
-            #print(sys.exc_info())
             abort(422)
 
     @app.route('/products/<int:product_id>', methods=['PATCH'])
@@ -318,7 +317,7 @@ def create_app(test_config=None):
 
             if orders is None:
                 abort(404)
-                
+
             total_orders = len(orders)
             selected_orders = paginate_data(request, orders)
 
@@ -332,7 +331,6 @@ def create_app(test_config=None):
 
             })
         except:
-            print(sys.exc_info())
             abort(422)
 
     @app.route('/orders/<int:order_id>')
@@ -341,7 +339,7 @@ def create_app(test_config=None):
         try:
             order = Order.query.get(order_id)
 
-            if order is None:
+            if order is None:               
                 abort(404)
             
             return jsonify({
@@ -356,7 +354,26 @@ def create_app(test_config=None):
     @requires_auth('post:orders')
     def create_order(payload):
         try:
-            smile = ";)"
+            body = request.get_json()
+
+            passed_user_id = body.get('user_id', None)
+
+            if passed_user_id is None:
+                abort(422)
+
+            if type(passed_user_id) != type(21):
+                abort(422)
+
+            new_order = Order(user_id=passed_user_id)
+
+            new_order.insert()
+
+            return jsonify({
+                'success': True,
+                'created': new_order.id,
+                'order': new_order.format()
+            })
+
 
         except:
             abort(422)
@@ -365,10 +382,25 @@ def create_app(test_config=None):
     @requires_auth('delete:orders')
     def delete_order(payload,order_id):
         try:
-            smile = ";)"
+            user = User.query.get(order_id)
+            
+            if user is None:
+                abort(404)
+
+            user.delete()
+
+            return jsonify({
+                'success': True,
+                'deleted': order_id
+            })
 
         except:
             abort(422)
+
+#----------------------------------------------------------------------------#
+# OrderItems
+#----------------------------------------------------------------------------#    
+        
 
 #----------------------------------------------------------------------------#
 # Error Handling

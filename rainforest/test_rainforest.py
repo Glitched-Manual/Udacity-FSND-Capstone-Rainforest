@@ -161,7 +161,7 @@ class RainforestTestCase(unittest.TestCase):
             json=self.product.format())
 
         data = json.loads(res.data)   
-        #print(data)           
+                  
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message']['description'], 'permission not found')
@@ -312,14 +312,14 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['user']['id'], new_user_id)
 
     def test_get_user_by_id_out_of_bounds_failure(self):
-        res = self.client().get('/users' + str(500000), headers={
+        res = self.client().get('/users?page=' + str(500000), headers={
             'Authorization': "Bearer {}".format(self.staff_token)}
         )
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], "resource not found")
+        self.assertEqual(data['message'], "unprocessable")
 
     def test_create_user(self):
 
@@ -397,8 +397,73 @@ class RainforestTestCase(unittest.TestCase):
         self.assertTrue(data['orders'], True)
         self.assertTrue(data['total_orders'], True)
 
-    #def test_get_orders_out_of_bounds_fail(self):
-    #    res = self.client().get()
+    def test_get_orders_out_of_bounds_fail(self):
+        res = self.client().get('/orders?page='+ str(9001), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+            })
+
+        data = json.loads(res.data)        
+        
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
+
+    def test_get_order_by_id(self):
+        self.order.insert()
+
+        order_id = self.order.id
+
+        res = self.client().get('/orders/'+ str(order_id), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+            })
+        
+        data = json.loads(res.data)        
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['order']['id'], order_id)
+
+    def test_get_order_by_id_fail(self):
+        res = self.client().get('/orders/'+ str(98077), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+            })
+        data = json.loads(res.data)
+        
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
+
+    def test_create_order(self):
+        #create dummy user
+        self.user.insert()
+        dummy_user_id = self.user.id
+
+        res = self.client().post('/orders', headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+            }, json={
+                'user_id': dummy_user_id
+            })
+        
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['created'], True)
+        self.assertTrue(data['order'], True)
+
+    def test_create_order_failure(self):
+        bad_user_id = ":>"
+
+        res = self.client().post('/orders', headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+            }, json={
+                'user_id': bad_user_id
+            })
+
+        data = json.loads(res.data)        
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
 
 # Make the tests conveniently executable
 # I forgot to use this
