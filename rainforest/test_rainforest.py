@@ -465,6 +465,37 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
 
+    def test_delete_order(self):
+        self.user.insert()
+        dummy_user_id = self.user.id
+        dummy_order = models.Order(user_id=dummy_user_id)
+        dummy_order.insert()
+        dummy_order_id = dummy_order.id
+
+        res = self.client().delete('/orders/' + str(dummy_order_id), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+            })
+
+        data = json.loads(res.data)
+        
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted'], dummy_order_id)
+
+    def test_delete_order_failure(self):
+        res = self.client().delete('/orders/' + str(9999999999), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+            })
+
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "unprocessable")
+#----------------------------------------------------------------------------#
+# OrderItems
+#----------------------------------------------------------------------------#    
+
+
 # Make the tests conveniently executable
 # I forgot to use this
 if __name__ == "__main__":
