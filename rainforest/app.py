@@ -1,6 +1,6 @@
 import os ,sys
 from flask import Flask, request, abort, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy, model
 from flask_cors import CORS, cross_origin
 from sqlalchemy.sql.sqltypes import REAL
 
@@ -400,7 +400,99 @@ def create_app(test_config=None):
 #----------------------------------------------------------------------------#
 # OrderItems
 #----------------------------------------------------------------------------#    
+    @app.route('/order_items')
+    @requires_auth('get:order_items')
+    def get_order_items(payload):
+        try:
+
+            order_items = OrderItem.query.order_by(OrderItem.id).all()
+
+            if order_items is None:
+                abort(404)
+
+            total_order_items = len(order_items)
+
+            selected_order_items = paginate_data(request, order_items)
+
+            if len(selected_order_items) == 0:
+                abort(404)
+
+
+
+            return jsonify({
+                'success': True,
+                'order_items': selected_order_items,
+                'total_order_items': total_order_items
+            })
+        except:
+            abort(422)
+
+    @app.route('/order_items/<int:order_item_id>')
+    @requires_auth('get:orders')
+    def get_order_item_by_id(payload, order_item_id):
+        try:
+            order_item = OrderItem.query.get(order_item_id)
+
+            if order_item is None:               
+                abort(404)
+            
+            return jsonify({
+                'success': True,
+                'order': order_item.format()               
+            })
         
+        except:
+            abort(422)
+
+    @app.route('/order_items', methods=['POST'])
+    @requires_auth('post:order_items')
+    def create_order_item(payload):
+        try:
+
+            body = request.get_json()
+            
+            order_order_id = body.get('order_id', None)
+            order_product_id = body.get('product_id', None)
+            order_product_quantity = body.get('product_quantity', None)
+
+            order_item_attributes =[order_product_id, order_order_id, order_product_quantity]
+            
+            for attr in order_item_attributes:
+                if attr is None:
+                    abort(422)
+
+            order_item = OrderItem(order_id=order_order_id, product_id=order_product_id, product_quantity=order_product_quantity)
+
+            return jsonify({
+                'success': True,
+                'created': order_item.id,
+                'order_item': order_item.format()
+            })
+
+        except:
+            abort(422)
+
+    @app.route('/order_items/<int:order_item_id>', methods=['DELETE'])
+    @requires_auth('delete:order_items')
+    def delete_product(payload,order_item_id):
+        try:
+            order_item = Product.query.get(order_item_id)
+
+            if order_item is None:
+                abort(404)
+
+            order_item.delete()           
+
+
+            return jsonify(
+                {
+                    "success": True,
+                    "deleted": order_item_id,
+                                       
+                }
+            )
+        except:
+            abort(422)
 
 #----------------------------------------------------------------------------#
 # Error Handling

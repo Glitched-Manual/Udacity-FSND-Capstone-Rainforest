@@ -209,6 +209,7 @@ class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('Order.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('Product.id'), nullable=False)
+    product_quantity = db.Column(db.Integer,nullable=False)
 
     def insert(self):
         db.session.add(self)
@@ -225,5 +226,6 @@ class OrderItem(db.Model):
         return {
             'id': self.id,
             'order_id': self.order_id,
-            'product_id': self.product_id
+            'product_id': self.product_id,
+            'product_quantity': self.product_quantity
         }
