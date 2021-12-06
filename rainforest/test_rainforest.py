@@ -574,6 +574,40 @@ class RainforestTestCase(unittest.TestCase):
         self.assertTrue('created', True)
         self.assertTrue('order_item', True)
 
+    def test_create_order_item_fail(self):
+        self.order.insert()
+        self.product.insert()
+
+        order_id = self.order.id
+        product_id = self.product.id
+        product_quantity = "wrong type"
+
+        res = self.client().post('/order_items', headers= {
+            'Authorization': "Bearer {}".format(self.staff_token)
+        }, json={'order_id': order_id, 'product_id': product_id, 'product_quantity': product_quantity  
+        })
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
+
+    def test_delete_order_item(self):
+        self.order_item.insert()
+        order_item_id = self.order_item.id
+
+        res = self.client().delete('/order_items/' + str(order_item_id), headers= {
+            'Authorization': "Bearer {}".format(self.staff_token)
+        })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted'], order_item_id)
+
+
+
 # Make the tests conveniently executable
 # I forgot to use this
 if __name__ == "__main__":
