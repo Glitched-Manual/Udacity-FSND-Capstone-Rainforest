@@ -607,7 +607,16 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['deleted'], order_item_id)
 
 
+    def test_delete_order_fail(self):
 
+        res = self.client().delete('/order_items/' + str(99999999), headers= {
+            'Authorization': "Bearer {}".format(self.staff_token)
+        })
+
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "unprocessable")
 # Make the tests conveniently executable
 # I forgot to use this
 if __name__ == "__main__":

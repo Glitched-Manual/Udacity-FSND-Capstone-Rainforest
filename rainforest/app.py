@@ -495,7 +495,7 @@ def create_app(test_config=None):
                     "deleted": order_item_id,                                       
                 }
             )
-        except:
+        except:            
             abort(422)
 
 #----------------------------------------------------------------------------#
