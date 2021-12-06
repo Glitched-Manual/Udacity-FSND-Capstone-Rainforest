@@ -69,6 +69,11 @@ class RainforestTestCase(unittest.TestCase):
             self.order = models.Order(
                 user_id=1
             )
+            self.order_item = models.OrderItem(
+                order_id = 1,
+                product_id = 1,
+                product_quantity = 2
+            )
 
     def tearDown(self):
         """Executed after reach test"""
@@ -466,6 +471,7 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'unprocessable')
 
     def test_delete_order(self):
+
         self.user.insert()
         dummy_user_id = self.user.id
         dummy_order = models.Order(user_id=dummy_user_id)
@@ -494,7 +500,60 @@ class RainforestTestCase(unittest.TestCase):
 #----------------------------------------------------------------------------#
 # OrderItems
 #----------------------------------------------------------------------------#    
+    def test_get_order_items(self):
 
+        # add dummy order_item for test
+        self.order_item.insert()
+
+
+        res = self.client().get('/order_items', headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+        })
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['order_items'], True)
+        self.assertTrue(data['total_order_items'], True)
+
+    def test_get_order_item_out_of_bounds_error(self):
+        res = self.client().get('/order_items?page=' + str(846184), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+        })
+
+        data = json.loads(res.data)        
+        
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
+
+    def test_get_order_item_by_id(self):
+        self.order_item.insert()
+        order_item_id = self.order_item.id
+
+        res = self.client().get('/order_items/' + str(order_item_id), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+        })
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['order_item']['id'], order_item_id)
+
+    def test_get_order_item_by_id_failure(self):        
+
+        res = self.client().get('/order_items/' + str(800080), headers={
+            'Authorization': "Bearer {}".format(self.staff_token)
+        })
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
+        
 
 # Make the tests conveniently executable
 # I forgot to use this

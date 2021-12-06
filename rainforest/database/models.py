@@ -64,7 +64,9 @@ def db_drop_and_create_all():
 
     order_item = OrderItem(
         order_id = 1,
-        product_id = 1
+        product_id = 1,
+        product_quantity = 2
+
     )
     order_item.insert()
 #

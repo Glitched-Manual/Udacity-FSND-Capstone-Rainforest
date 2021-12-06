@@ -382,19 +382,19 @@ def create_app(test_config=None):
     @requires_auth('delete:orders')
     def delete_order(payload,order_id):
         try:
-            user = User.query.get(order_id)
+            order = Order.query.get(order_id)
             
-            if user is None:
+            if order is None:
                 abort(404)
 
-            user.delete()
+            order.delete()
 
             return jsonify({
                 'success': True,
                 'deleted': order_id
             })
 
-        except:
+        except:            
             abort(422)
 
 #----------------------------------------------------------------------------#
@@ -428,7 +428,7 @@ def create_app(test_config=None):
             abort(422)
 
     @app.route('/order_items/<int:order_item_id>')
-    @requires_auth('get:orders')
+    @requires_auth('get:order_items')
     def get_order_item_by_id(payload, order_item_id):
         try:
             order_item = OrderItem.query.get(order_item_id)
@@ -438,7 +438,7 @@ def create_app(test_config=None):
             
             return jsonify({
                 'success': True,
-                'order': order_item.format()               
+                'order_item': order_item.format()               
             })
         
         except:
@@ -460,9 +460,14 @@ def create_app(test_config=None):
             for attr in order_item_attributes:
                 if attr is None:
                     abort(422)
+                #check if each value is and integer abort if any is not int
+                if type(attr) != type(13):
+                    abort(422)
+
 
             order_item = OrderItem(order_id=order_order_id, product_id=order_product_id, product_quantity=order_product_quantity)
 
+            order_item.insert()
             return jsonify({
                 'success': True,
                 'created': order_item.id,
@@ -474,7 +479,7 @@ def create_app(test_config=None):
 
     @app.route('/order_items/<int:order_item_id>', methods=['DELETE'])
     @requires_auth('delete:order_items')
-    def delete_product(payload,order_item_id):
+    def delete_order_item(payload,order_item_id):
         try:
             order_item = Product.query.get(order_item_id)
 
@@ -487,8 +492,7 @@ def create_app(test_config=None):
             return jsonify(
                 {
                     "success": True,
-                    "deleted": order_item_id,
-                                       
+                    "deleted": order_item_id,                                       
                 }
             )
         except:
