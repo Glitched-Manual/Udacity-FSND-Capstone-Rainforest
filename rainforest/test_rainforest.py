@@ -553,7 +553,26 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
-        
+    
+    def test_create_order_item(self):
+        self.order.insert()
+        self.product.insert()
+
+        order_id = self.order.id
+        product_id = self.product.id
+        product_quantity = 10
+
+        res = self.client().post('/order_items', headers= {
+            'Authorization': "Bearer {}".format(self.staff_token)
+        }, json={'order_id': order_id, 'product_id': product_id, 'product_quantity': product_quantity  
+        })
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue('created', True)
+        self.assertTrue('order_item', True)
 
 # Make the tests conveniently executable
 # I forgot to use this
