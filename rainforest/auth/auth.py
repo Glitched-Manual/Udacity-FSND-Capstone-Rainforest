@@ -10,18 +10,20 @@ AUTH0_DOMAIN = 'manualdev.us.auth0.com'
 ALGORITHMS = 'RS256'
 API_AUDIENCE = 'rainforest-api'
 
-## AuthError Exception
+# AuthError Exception
 '''
 AuthError Exception
 A standardized way to communicate auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
-## Auth Header
+# Auth Header
 
 '''
 @TODO implement get_token_auth_header() method
@@ -31,6 +33,8 @@ class AuthError(Exception):
         it should raise an AuthError if the header is malformed
     return the token part of the header
 '''
+
+
 def get_token_auth_header():
     """Obtains the Access Token from the Authorization Header
     """
@@ -66,27 +70,29 @@ def get_token_auth_header():
 
 def check_permissions(permission, payload):
     # raise an AuthError if permissions are not included in the payload
-    #print(permission)
-    #print(payload['permissions'])
+    # print(permission)
+    # print(payload['permissions'])
     if 'permissions' in payload is False:
         raise AuthError({
                         'code': 'invalid_claims',
                         'description': 'Permissions not included within JWT'
                         }, 400)
-    # raise an AuthError if the requested permission string is not in the payload permissions array
+    # raise an AuthError if the requested permission string is not in the
+    # payload permissions array
     if permission not in payload['permissions']:
         raise AuthError({
             'code': 'unauthorized',
             'description': 'permission not found'
         }, 403)
-    
+
     return True
+
 
 def verify_decode_jwt(token):
     #print(f'***** auth domain {AUTH0_DOMAIN} *****')
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
-    
+
     unverified_header = jwt.get_unverified_header(token)
     rsa_key = {}
     if 'kid' not in unverified_header:
@@ -133,9 +139,9 @@ def verify_decode_jwt(token):
                 'description': 'Unable to parse authentication token.'
             }, 400)
     raise AuthError({
-                'code': 'invalid_header',
+        'code': 'invalid_header',
                 'description': 'Unable to find the appropriate key.'
-            }, 400)
+    }, 400)
 
 
 def requires_auth(permission=''):
