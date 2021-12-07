@@ -1,1 +1,1 @@
-web: gunicorn rainforest:app
+web: gunicorn --chdir rainforest app:app
