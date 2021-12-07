@@ -2,7 +2,7 @@
 import os
 import unittest
 import json
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, create_engine
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref
 
