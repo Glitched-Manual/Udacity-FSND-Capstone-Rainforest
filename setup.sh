@@ -11,3 +11,5 @@ export OWNER_TOKEN=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFyZmxmUEY2T0JwR
 #local stuff
 export FLASK_APP='rainforest.app'
 export FLASK_ENV='development'
+export FLASK_DEBUG=true
+flask run --reload

@@ -9,6 +9,9 @@ The data contain with the aplication can be read and managed by using key endpoi
 
 ## Deployment And Testing
 ----
+\
+The Rainforest may be accessed at: https://google.com
+during local operation: http://localhost:5000
 ### Dependanies
 \
 `Python3`
@@ -19,7 +22,7 @@ Python3 can be downloaded via the [official python site.](https://www.python.org
 \
 `A Virtual Enviornment`
 
-The project folder needed to be placed within a virtual enviornment.
+The project folder needs to be imported within a virtual enviornment.
 Then the enviornment must be activated.
 Info on how to create a virtual enviornment can be found [here](https://docs.python.org/3/tutorial/venv.html).
 \
@@ -35,6 +38,20 @@ cd Scripts
 
 After the python3 virtual enviornment is activated. The needed Python3 must be installed. This can be done by navigating to the project root directory and running:
 
-```bash 
+```bash
 pip install -r requirements.txt
 ```
+
+## Running the server
+----
+
+## API Reference
+----
+
+### Summary
+
+The Rainforest API has two different roles:
+
+- Staff
+    
+- Owner

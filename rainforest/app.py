@@ -42,10 +42,7 @@ def paginate_data(request, selection):
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__)
-    print('*********** name:'+__name__+'**********')
-    # setup_db only needs to be call here locally, because mange.py does not
-    # work locally
+    app = Flask(__name__)    
     setup_db(app)
     CORS(app)
 
