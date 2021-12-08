@@ -2,7 +2,6 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
 
-
 from rainforest.database.models import db
 from rainforest.app import app
 

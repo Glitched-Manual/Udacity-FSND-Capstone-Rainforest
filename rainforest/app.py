@@ -42,7 +42,7 @@ def paginate_data(request, selection):
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__)    
+    app = Flask(__name__)
     setup_db(app)
     CORS(app)
 
@@ -132,9 +132,8 @@ def create_app(test_config=None):
 
             product.insert()
 
-            
             all_products = Product.query.all()
-            total_products = len(all_products)            
+            total_products = len(all_products)
 
             return jsonify(
                 {
@@ -159,12 +158,11 @@ def create_app(test_config=None):
             product.delete()
 
             all_products = Product.query.order_by(Product.id).all()
-            
 
             return jsonify(
                 {
                     "success": True,
-                    "deleted": product.id,                    
+                    "deleted": product.id,
                     "total_products": len(all_products)
                 }
             )
@@ -176,7 +174,7 @@ def create_app(test_config=None):
     def patch_product(payload, product_id):
 
         try:
-            print(product_id)
+
             if product_id is None:
                 abort(422)
 
@@ -199,7 +197,7 @@ def create_app(test_config=None):
 
             if new_product_price:
 
-                if type(new_product_price) != type(1.1):
+                if not isinstance(new_product_price, type(1.1)):
                     abort(422)
                 product.price = new_product_price
 
@@ -212,7 +210,6 @@ def create_app(test_config=None):
                 'product_price': product.price
             })
         except BaseException:
-            print(sys.exc_info())
             abort(422)
 
 #----------------------------------------------------------------------------#
@@ -241,7 +238,7 @@ def create_app(test_config=None):
                 'users': paginated_user_list,
                 'total_users': total_users
             })
-        except:
+        except BaseException:
             abort(422)
 
     @app.route('/users/<int:user_id>')
@@ -282,7 +279,7 @@ def create_app(test_config=None):
                 'user': new_user.format()
 
             })
-        except:
+        except BaseException:
             abort(422)
 
     @app.route('/users/<int:user_id>', methods=['DELETE'])
@@ -451,15 +448,17 @@ def create_app(test_config=None):
             order_order_id = body.get('order_id', None)
             order_product_id = body.get('product_id', None)
             order_product_quantity = body.get('product_quantity', None)
-          
 
-            if (order_order_id is None) or (type(order_order_id)) != type(51):
-                abort(422) 
-
-            if (order_order_id is None) or (type(order_product_id)) != type(51):
+            if (order_order_id is None) or not isinstance(
+                    51, (type(order_order_id))):
                 abort(422)
 
-            if (order_product_quantity is None) or (type(order_product_quantity)) != type(51):
+            if (order_order_id is None) or not isinstance(
+                    51, (type(order_product_id))):
+                abort(422)
+
+            if (order_product_quantity is None) or not isinstance(
+                    51, (type(order_product_quantity))):
                 abort(422)
 
             order_item = OrderItem(
@@ -475,7 +474,6 @@ def create_app(test_config=None):
             })
 
         except BaseException:
-            print(sys.exc_info())
             abort(422)
 
     @app.route('/order_items/<int:order_item_id>', methods=['DELETE'])
@@ -540,6 +538,7 @@ def create_app(test_config=None):
         }), ex.status_code
 
     return app
+
 
 app = create_app()
 

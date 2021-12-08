@@ -38,7 +38,10 @@ class RainforestTestCase(unittest.TestCase):
         self.database_username = os.environ['DATABASE_USERNAME']
         self.database_user_password = os.environ['DATABASE_USER_PASSWORD']
         self.database_path = "postgresql://{}:{}@{}/{}".format(
-            self.database_username,self.database_user_password,'localhost:5432', self.database_name) # replace with os.environ[]
+            self.database_username,
+            self.database_user_password,
+            'localhost:5432',
+            self.database_name)  # replace with os.environ[]
 
         self.owner_token = os.environ['OWNER_TOKEN']
         self.staff_token = os.environ['STAFF_TOKEN']
@@ -51,7 +54,6 @@ class RainforestTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-                        
 
             self.user = models.User(
                 name="chris condo"
