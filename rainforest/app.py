@@ -43,9 +43,6 @@ def paginate_data(request, selection):
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    print('*********** name:'+__name__+'**********')
-    # setup_db only needs to be call here locally, because mange.py does not
-    # work locally
     setup_db(app)
     CORS(app)
 
@@ -135,15 +132,15 @@ def create_app(test_config=None):
 
             product.insert()
 
-            product_catalog = Product.query.order_by(Product.id).all()
-            displayed_products = paginate_data(request, product_catalog)
+            all_products = Product.query.all()
+            total_products = len(all_products)
 
             return jsonify(
                 {
                     "success": True,
                     "created": product.id,
-                    "products": displayed_products,
-                    "total_products": len(product_catalog)
+                    "product": product.format(),
+                    "total_products": total_products
                 }
             )
         except BaseException:
@@ -160,15 +157,13 @@ def create_app(test_config=None):
 
             product.delete()
 
-            product_catalog = Product.query.order_by(Product.id).all()
-            displayed_products = paginate_data(request, product_catalog)
+            all_products = Product.query.order_by(Product.id).all()
 
             return jsonify(
                 {
                     "success": True,
                     "deleted": product.id,
-                    "products": displayed_products,
-                    "total_products": len(product_catalog)
+                    "total_products": len(all_products)
                 }
             )
         except BaseException:
@@ -179,6 +174,7 @@ def create_app(test_config=None):
     def patch_product(payload, product_id):
 
         try:
+
             if product_id is None:
                 abort(422)
 
@@ -205,6 +201,7 @@ def create_app(test_config=None):
                     abort(422)
                 product.price = new_product_price
 
+            product.update()
             return jsonify({
                 'success': True,
                 'patched': product_id,
@@ -452,17 +449,17 @@ def create_app(test_config=None):
             order_product_id = body.get('product_id', None)
             order_product_quantity = body.get('product_quantity', None)
 
-            order_item_attributes = [
-                order_product_id,
-                order_order_id,
-                order_product_quantity]
+            if (order_order_id is None) or not isinstance(
+                    51, (type(order_order_id))):
+                abort(422)
 
-            for attr in order_item_attributes:
-                if attr is None:
-                    abort(422)
-                # check if each value is and integer abort if any is not int
-                if not isinstance(attr, type(13)):
-                    abort(422)
+            if (order_order_id is None) or not isinstance(
+                    51, (type(order_product_id))):
+                abort(422)
+
+            if (order_product_quantity is None) or not isinstance(
+                    51, (type(order_product_quantity))):
+                abort(422)
 
             order_item = OrderItem(
                 order_id=order_order_id,
@@ -541,6 +538,7 @@ def create_app(test_config=None):
         }), ex.status_code
 
     return app
+
 
 app = create_app()
 

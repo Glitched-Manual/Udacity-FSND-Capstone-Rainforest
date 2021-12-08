@@ -34,9 +34,14 @@ class RainforestTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "rainforest_db"
-        self.database_path = "postgresql://student:student@{}/{}".format(
-            'localhost:5432', self.database_name)
+        self.database_name = os.environ['DATABASE_NAME']
+        self.database_username = os.environ['DATABASE_USERNAME']
+        self.database_user_password = os.environ['DATABASE_USER_PASSWORD']
+        self.database_path = "postgresql://{}:{}@{}/{}".format(
+            self.database_username,
+            self.database_user_password,
+            'localhost:5432',
+            self.database_name)  # replace with os.environ[]
 
         self.owner_token = os.environ['OWNER_TOKEN']
         self.staff_token = os.environ['STAFF_TOKEN']
@@ -49,8 +54,7 @@ class RainforestTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-            # store values for tests one of each User, Order, OrderItem,
-            # Product
+
             self.user = models.User(
                 name="chris condo"
             )
@@ -131,7 +135,7 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
 
         self.assertTrue(data['created'], True)
-        self.assertTrue(data['products'], True)
+        self.assertTrue(data['product'], True)
         self.assertTrue(data['total_products'], True)
 
     # invalid product attributes fail
