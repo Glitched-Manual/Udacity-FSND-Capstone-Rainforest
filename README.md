@@ -1,24 +1,32 @@
 # Rainforest Store API
+
 ## Udacity Nanodegree Capstone Project
+
 ----
+
 ## Summary
+
 ----
 \
 Rainforest is a fullstack API. The Rainforest API is a web application is a simulated store system for recording orders, and user information. The application stores the data in a posgresql server.
 The data contain with the aplication can be read and managed by using key endpoints.
 
 ## Deployment And Testing
+
 ----
 \
 The Rainforest API may be accessed on heroku at: [heroku app link](https://rainforest-capstone.herokuapp.com/).
 
 During local operation: [local link](http://localhost:5000)
+
 ### Dependanies
+
 \
+
 `Python3`
 \
 Python 3.9 is the reccommend version of python for running the Rainforest API.
-Python3 can be downloaded via the [official python site.](https://www.python.org/downloads/) 
+Python3 can be downloaded via the [official python site.](https://www.python.org/downloads/)
 
 \
 `Postgresql`
@@ -66,12 +74,11 @@ setup.sh
 flask run
 ```
 
-
 ## API Reference
 
 ----
 
-### Summary
+### API Summary
 
 The Rainforest API has two different roles:
 
@@ -140,7 +147,13 @@ Get '/'
 
 - Returns a friendly welcome  message
 
+sample request:
+
+```bash
 curl https://rainforest-capstone.herokuapp.com/
+```
+
+Output:
 
 ```bash
 Welcome to Rainforest! :>
@@ -156,6 +169,8 @@ sample request:
 ```bash
 curl https://rainforest-capstone.herokuapp.com/"products"
 ```
+
+Output:
 
 ```bash
 
