@@ -4,7 +4,7 @@
 ## Summary
 ----
 \
-Rainforest is a fullstack API. Is a web application is a store databank for storing orders, and user information. The application stores the data in a posgresql server.
+Rainforest is a fullstack API. The Rainforest API is a web application is a simulated store system for recording orders, and user information. The application stores the data in a posgresql server.
 The data contain with the aplication can be read and managed by using key endpoints.
 
 ## Deployment And Testing
@@ -55,9 +55,9 @@ pip install -r requirements.txt
 
 ----
 
-To run the server after installing the requirements via pip, and have a database on postgresql called `rainforest_db`
+To run the server after installing the requirements via pip, and have a database on postgresql called `rainforest_db`.
 
-edit the values for you local database credentials in `setup.sh`.
+After the postgresql server is setup, edit the values for you local database credentials in `setup.sh`.
 
 Then run:
 
@@ -77,13 +77,13 @@ The Rainforest API has two different roles:
 
 - `Staff`
 
-  - can perform most of the store functions from viewing products, managing user info, proccesing orders and the items(order_items) within the orders.
+  - Can perform most of the store functions from viewing products, managing user info, proccesing orders and the items(order_items) within the orders.
 
   - permissions: `get:users, post:users, delete:users, get:orders, post:orders, delete:orders, get:order_items, post:order_items, delete:order_items`.
 - `Owner`
-  - preforms all the actions as a user with the `Staff` role. The owner may also add, edit and remove products from the system.
+  - Preforms all the actions as a user with the `Staff` role. The owner may also add, edit and remove products from the system.
   
-  - has premissions `post:products, delete:products, patch:products`. The `Owner` additionally has each of the permissions the `Staff` have.
+  - Has premissions `post:products, delete:products, patch:products`. The `Owner` additionally has each of the permissions the `Staff` have.
 \
 
 ## Error Handling
