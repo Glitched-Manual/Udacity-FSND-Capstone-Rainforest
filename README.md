@@ -81,7 +81,7 @@ The Rainforest API has two different roles:
 
   - permissions: `get:users, post:users, delete:users, get:orders, post:orders, delete:orders, get:order_items, post:order_items, delete:order_items`.
 - `Owner`
-  - preforms all the actions as one with the `Staff` role. The owner may also add, edit and remove products from the system.
+  - preforms all the actions as a user with the `Staff` role. The owner may also add, edit and remove products from the system.
   
   - has premissions `post:products, delete:products, patch:products`. The `Owner` additionally has each of the permissions the `Staff` have.
 \
@@ -138,11 +138,15 @@ Patch: patch product
 ----
 Get '/'
 
+- Returns a friendly welcome  message
+
 curl https://rainforest-capstone.herokuapp.com/
 
 ```bash
 Welcome to Rainforest! :>
 ```
+
+- Returns a paginated list of products.
 
 Get `/products`
 
@@ -180,6 +184,8 @@ curl https://rainforest-capstone.herokuapp.com/"products"
 
 Get `/products/id`
 
+- Returns the product that has the passed id.
+
 sample request:
 
 ```bash
@@ -202,6 +208,8 @@ Output:
 ```
 
 Get `users`
+
+- Returns a paginated list of users
 
 sample request:
 
@@ -232,6 +240,8 @@ Get `/users/id`
 
 sample request:
 
+- Returns the user that has the passed id.
+
 ```bash
 curl -H "Authorization: Bearer $STAFF_TOKEN" -X GET https://rainforest-capstone.herokuapp.com/"users/1"
 ```
@@ -249,6 +259,8 @@ Output:
 ```
 
 Get `orders`
+
+- Returns a paginated list of orders
 
 sample request:
 
@@ -277,6 +289,8 @@ Output:
 
 Get `/orders/id`
 
+- Returns the user that has the passed id.
+
 sample request:
 
 ```bash
@@ -296,6 +310,8 @@ Output:
 ```
 
 Get `/order_items`
+
+- Returns a paginated list of order items
 
 sample request:
 
@@ -328,6 +344,8 @@ Output:
 
 Get `/order_items/id`
 
+- Returns the order item that has the passed id.
+
 sample request:
 
 ```bash
@@ -355,6 +373,9 @@ Output:
 
 POST `/products`
 
+- creates a new product
+- requires `name`(string), `description`(string), price(float) to be passed as json for the request.
+
 sample request:
 
 ```bash
@@ -380,6 +401,9 @@ Output:
 
 POST `/users`
 
+- creates a new user.
+- requires `name`(string) to be passed as json for the request.
+
 sample request:
 
 ```bash
@@ -401,6 +425,10 @@ Output:
 
 POST `/orders`
 
+- creates a new order.
+- requires `user_id`(integer) to be passed as json for the request.
+- The `user_id` must match the id of an existing user.
+
 sample request:
 
 ```bash
@@ -421,6 +449,11 @@ Output:
 ```
 
 POST `/order_items`
+
+- creates a new order item.
+- requires `user_id`(integer) to be passed as json for the request.
+- The `order_id` must match the id of an existing order.
+- The `product_id` must match the id of an existing product.
 
 sample request:
 
