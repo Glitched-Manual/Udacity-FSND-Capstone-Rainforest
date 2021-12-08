@@ -383,7 +383,7 @@ POST `/products`
 
 - Creates a new product
 - Requires `name`(string), `description`(string), price(float) to be passed as json for the request.
-- Requires the `post:products` permission.
+- Requires the `post:products` permission. Only a user with the`owner` role can use this endpoint
 
 sample request:
 
@@ -490,7 +490,11 @@ Output:
 
 ## Delete Methods
 
-Delete `/products`
+Delete `/products/id`
+
+- Deletes the `product` that has the passed `id` as the value for it id atrribute.
+
+- Requires the `delete:products` permission. Only a user with the`owner` role can use this end point
 
 sample request:
 
@@ -510,6 +514,10 @@ Output:
 
 Delete `/users/id`
 
+- Deletes the `user` that has the passed `id` as the value for it id atrribute.
+
+- Requires the `delete:users` permission.
+
 sample request:
 
 ```bash
@@ -527,6 +535,10 @@ Output:
 
 Delete `/orders/id`
 
+- Deletes the `order` that has the passed `id` as the value for it id atrribute.
+
+- Requires the `delete:orders` permission.
+
 sample request:
 
 ```bash
@@ -543,6 +555,12 @@ Output:
 ```
 
 Delete `/order_items/id`
+
+Delete `/users/id`
+
+- Deletes the `order item` that has the passed `id` as the value for it id atrribute.
+
+- Requires the `delete:order_items` permission.
 
 sample request:
 
@@ -563,7 +581,11 @@ Output:
 
 ----
 
-Patch '/products'
+Patch `/products/id`
+
+- Updates the `product` that has the passed id as the value for its `id` attribute.
+
+- Requires the `patch:products` permission. Only a user with the`owner` role can use this endpoint
 
 sample request:
 
