@@ -132,15 +132,16 @@ def create_app(test_config=None):
 
             product.insert()
 
-            product_catalog = Product.query.order_by(Product.id).all()
-            displayed_products = paginate_data(request, product_catalog)
+            
+            all_products = Product.query.all()
+            total_products = len(all_products)            
 
             return jsonify(
                 {
                     "success": True,
                     "created": product.id,
-                    "products": displayed_products,
-                    "total_products": len(product_catalog)
+                    "product": product.format(),
+                    "total_products": total_products
                 }
             )
         except BaseException:
@@ -157,15 +158,14 @@ def create_app(test_config=None):
 
             product.delete()
 
-            product_catalog = Product.query.order_by(Product.id).all()
-            displayed_products = paginate_data(request, product_catalog)
+            all_products = Product.query.order_by(Product.id).all()
+            
 
             return jsonify(
                 {
                     "success": True,
-                    "deleted": product.id,
-                    "products": displayed_products,
-                    "total_products": len(product_catalog)
+                    "deleted": product.id,                    
+                    "total_products": len(all_products)
                 }
             )
         except BaseException:
@@ -209,7 +209,7 @@ def create_app(test_config=None):
                 'product_description': product.description,
                 'product_price': product.price
             })
-        except BaseException:
+        except:
             abort(422)
 
 #----------------------------------------------------------------------------#
@@ -238,7 +238,7 @@ def create_app(test_config=None):
                 'users': paginated_user_list,
                 'total_users': total_users
             })
-        except BaseException:
+        except:
             abort(422)
 
     @app.route('/users/<int:user_id>')
@@ -279,7 +279,7 @@ def create_app(test_config=None):
                 'user': new_user.format()
 
             })
-        except BaseException:
+        except:
             abort(422)
 
     @app.route('/users/<int:user_id>', methods=['DELETE'])
@@ -448,18 +448,16 @@ def create_app(test_config=None):
             order_order_id = body.get('order_id', None)
             order_product_id = body.get('product_id', None)
             order_product_quantity = body.get('product_quantity', None)
+          
 
-            order_item_attributes = [
-                order_product_id,
-                order_order_id,
-                order_product_quantity]
+            if (order_order_id is None) or (type(order_order_id)) != type(51):
+                abort(422) 
 
-            for attr in order_item_attributes:
-                if attr is None:
-                    abort(422)
-                # check if each value is and integer abort if any is not int
-                if not isinstance(attr, type(13)):
-                    abort(422)
+            if (order_order_id is None) or (type(order_product_id)) != type(51):
+                abort(422)
+
+            if (order_product_quantity is None) or (type(order_product_quantity)) != type(51):
+                abort(422)
 
             order_item = OrderItem(
                 order_id=order_order_id,
@@ -473,7 +471,8 @@ def create_app(test_config=None):
                 'order_item': order_item.format()
             })
 
-        except BaseException:
+        except:
+            print(sys.exc_info())
             abort(422)
 
     @app.route('/order_items/<int:order_item_id>', methods=['DELETE'])
@@ -493,7 +492,7 @@ def create_app(test_config=None):
                     "deleted": order_item_id,
                 }
             )
-        except BaseException:
+        except:
             abort(422)
 
 #----------------------------------------------------------------------------#

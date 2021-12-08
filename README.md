@@ -113,17 +113,25 @@ The Rainforest returns the following response error code depending how the reque
 - 500 - Internal Server Error
 
 ## Endpoints
+
 ----
 
-### methods 
+### Endpoint methods
 
 ```html
 Get: get products, get users, get orders, get order_items
 
-Post:
+Post: create product, create user, create order, create order_item
 
-Delete:
+Delete: delete product, delete user, delete order, delete order_item
 
-Patch:
+Patch: patch product
     
 ```
+
+## Get
+
+----
+
+Get `/products`
+

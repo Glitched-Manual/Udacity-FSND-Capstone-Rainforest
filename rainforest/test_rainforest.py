@@ -133,7 +133,7 @@ class RainforestTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
 
         self.assertTrue(data['created'], True)
-        self.assertTrue(data['products'], True)
+        self.assertTrue(data['product'], True)
         self.assertTrue(data['total_products'], True)
 
     # invalid product attributes fail

@@ -4,3 +4,4 @@ rainforest/database/.env
 /rainforest/database/__pycache__/*
 /rainforest/auth/__pycache__/*
 setup.bat
+curl_tests.sh
