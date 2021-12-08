@@ -147,6 +147,7 @@ Welcome to Rainforest! :>
 ```
 
 - Returns a paginated list of products.
+- does not require permissions.
 
 Get `/products`
 
@@ -185,6 +186,7 @@ curl https://rainforest-capstone.herokuapp.com/"products"
 Get `/products/id`
 
 - Returns the product that has the passed id.
+- does not require permissions.
 
 sample request:
 
@@ -209,7 +211,8 @@ Output:
 
 Get `users`
 
-- Returns a paginated list of users
+- Returns a paginated list of users.
+- Requires the `get:users` permission.
 
 sample request:
 
@@ -241,6 +244,7 @@ Get `/users/id`
 sample request:
 
 - Returns the user that has the passed id.
+- Requires the `get:users` permission.
 
 ```bash
 curl -H "Authorization: Bearer $STAFF_TOKEN" -X GET https://rainforest-capstone.herokuapp.com/"users/1"
@@ -260,7 +264,8 @@ Output:
 
 Get `orders`
 
-- Returns a paginated list of orders
+- Returns a paginated list of orders.
+- Requires the `get:orders` permission.
 
 sample request:
 
@@ -290,6 +295,7 @@ Output:
 Get `/orders/id`
 
 - Returns the user that has the passed id.
+- Requires the `get:orders` permission.
 
 sample request:
 
@@ -311,7 +317,8 @@ Output:
 
 Get `/order_items`
 
-- Returns a paginated list of order items
+- Returns a paginated list of order items.
+- Requires the `get:order_items` permission.
 
 sample request:
 
@@ -345,6 +352,7 @@ Output:
 Get `/order_items/id`
 
 - Returns the order item that has the passed id.
+- Requires the `get:order_items` permission.
 
 sample request:
 
