@@ -337,7 +337,15 @@ curl -H "Authorization: Bearer $STAFF_TOKEN" -X GET https://rainforest-capstone.
 Output:
 
 ```bash
-
+{
+  "order_item": {
+    "id": 1,
+    "order_id": 1,
+    "product_id": 1,
+    "product_quantity": 2
+  },
+  "success": true
+}
 
 ```
 
@@ -345,74 +353,187 @@ Output:
 
 ----
 
+POST `/products`
+
 sample request:
 
 ```bash
-
+curl -d '{  "name":"rbg dice",  "description":"programmable gaming dice set",  "price":15}' -H "Content-Type: application/json" -H "Authorization: Bearer $OWNER_TOKEN" -X POST https://rainforest-capstone.herokuapp.com/"products"
 ```
 
 Output:
 
 ```bash
-
+{
+  "created": 101,
+  "product": {
+    "description": "programmable gaming dice set",
+    "id": 101,
+    "name": "rbg dice",
+    "price": 15.0
+  },
+  "success": true,
+  "total_products": 84
+}
 
 ```
+
+POST `/users`
 
 sample request:
 
 ```bash
-
+curl -d '{  "name":"cool guy"}' -H "Content-Type: application/json" -H "Authorization: Bearer $STAFF_TOKEN" -X POST https://rainforest-capstone.herokuapp.com/"users"
 ```
 
 Output:
 
 ```bash
-
+{
+  "created": 80,
+  "success": true,
+  "user": {
+    "id": 80,
+    "name": "cool guy"
+  }
+}
 ```
+
+POST `/orders`
+
 sample request:
 
 ```bash
-
+curl -d '{  "user_id":2 }' -H "Content-Type: application/json" -H "Authorization: Bearer $STAFF_TOKEN" -X POST https://rainforest-capstone.herokuapp.com/"orders"
 ```
 
 Output:
 
 ```bash
-
+{
+  "created": 58,
+  "order": {
+    "id": 58,
+    "user_id": 2
+  },
+  "success": true
+}
 ```
+
+POST `/order_items`
 
 sample request:
 
 ```bash
-
+curl -d '{  "order_id":7, "product_id":1, "product_quantity":20 }' -H "Content-Type: application/json" -H "Authorization: Bearer $STAFF_TOKEN" -X POST https://rainforest-capstone.herokuapp.com/"order_items"
 ```
 
 Output:
 
 ```bash
-
+{
+  "created": 58,
+  "order_item": {
+    "id": 58,
+    "order_id": 7,
+    "product_id": 1,
+    "product_quantity": 20
+  },
+  "success": true
+}
 ```
+
+## Delete Methods
+
+Delete `/products`
 
 sample request:
 
 ```bash
-
+curl -H "Content-Type: application/json" -H "Authorization: Bearer $OWNER_TOKEN" -X DELETE $root"products/102"
 ```
 
 Output:
 
 ```bash
-
+{
+  "deleted": 102,
+  "success": true,
+  "total_products": 101
+}
 ```
+
+Delete `/users/id`
 
 sample request:
 
 ```bash
-
+curl -H "Content-Type: application/json" -H "Authorization: Bearer $STAFF_TOKEN" -X DELETE $root"users/12"
 ```
 
 Output:
 
 ```bash
+{
+  "deleted": 12,
+  "success": true
+}
+```
 
+Delete `/orders/id`
+
+sample request:
+
+```bash
+curl -H "Content-Type: application/json" -H "Authorization: Bearer $STAFF_TOKEN" -X DELETE $root"orders/57"
+```
+
+Output:
+
+```bash
+{
+  "deleted": 57,
+  "success": true
+}
+```
+
+Delete `/order_items/id`
+
+sample request:
+
+```bash
+curl -H "Content-Type: application/json" -H "Authorization: Bearer $STAFF_TOKEN" -X DELETE $root"order_items/55"
+```
+
+Output:
+
+```bash
+{
+  "deleted": 55,
+  "success": true
+}
+```
+
+## Patch Methods
+
+----
+
+Patch '/products'
+
+sample request:
+
+```bash
+curl -d '{  "name":"new video game",  "description":"the most EPIC AAA of the year!!!!!!!!!",  "price":90.95}' -H "Content-Type: application/json" -H "Authorization: Bearer $OWNER_TOKEN" -X PATCH $root"products/99"
+```
+
+Output:
+
+```bash
+{
+  "patched": 99,
+  "product_description": "the most EPIC AAA of the year!!!!!!!!!",
+  "product_name": "new video game",
+  "product_price": 90.95,
+  "success": true
+}
 ```
