@@ -381,8 +381,9 @@ Output:
 
 POST `/products`
 
-- creates a new product
-- requires `name`(string), `description`(string), price(float) to be passed as json for the request.
+- Creates a new product
+- Requires `name`(string), `description`(string), price(float) to be passed as json for the request.
+- Requires the `post:products` permission.
 
 sample request:
 
@@ -409,8 +410,9 @@ Output:
 
 POST `/users`
 
-- creates a new user.
-- requires `name`(string) to be passed as json for the request.
+- Creates a new user.
+- Requires `name`(string) to be passed as json for the request.
+- Requires the `post:users` permission.
 
 sample request:
 
@@ -433,9 +435,10 @@ Output:
 
 POST `/orders`
 
-- creates a new order.
-- requires `user_id`(integer) to be passed as json for the request.
+- Creates a new order.
+- Requires `user_id`(integer) to be passed as json for the request.
 - The `user_id` must match the id of an existing user.
+- Requires the `post:orders` permission.
 
 sample request:
 
@@ -458,10 +461,11 @@ Output:
 
 POST `/order_items`
 
-- creates a new order item.
-- requires `user_id`(integer) to be passed as json for the request.
+- Creates a new order item.
+- Requires `user_id`(integer) to be passed as json for the request.
 - The `order_id` must match the id of an existing order.
 - The `product_id` must match the id of an existing product.
+- Requires the `post:order_items` permission.
 
 sample request:
 
