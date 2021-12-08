@@ -176,6 +176,7 @@ def create_app(test_config=None):
     def patch_product(payload, product_id):
 
         try:
+            print(product_id)
             if product_id is None:
                 abort(422)
 
@@ -198,10 +199,11 @@ def create_app(test_config=None):
 
             if new_product_price:
 
-                if not isinstance(new_product_price, type(1.1)):
+                if type(new_product_price) != type(1.1):
                     abort(422)
                 product.price = new_product_price
 
+            product.update()
             return jsonify({
                 'success': True,
                 'patched': product_id,
@@ -209,7 +211,8 @@ def create_app(test_config=None):
                 'product_description': product.description,
                 'product_price': product.price
             })
-        except:
+        except BaseException:
+            print(sys.exc_info())
             abort(422)
 
 #----------------------------------------------------------------------------#
@@ -471,7 +474,7 @@ def create_app(test_config=None):
                 'order_item': order_item.format()
             })
 
-        except:
+        except BaseException:
             print(sys.exc_info())
             abort(422)
 
@@ -492,7 +495,7 @@ def create_app(test_config=None):
                     "deleted": order_item_id,
                 }
             )
-        except:
+        except BaseException:
             abort(422)
 
 #----------------------------------------------------------------------------#

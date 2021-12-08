@@ -10,8 +10,9 @@ The data contain with the aplication can be read and managed by using key endpoi
 ## Deployment And Testing
 ----
 \
-The Rainforest may be accessed at: https://google.com
-during local operation: http://localhost:5000
+The Rainforest API may be accessed on heroku at: [heroku app link](https://rainforest-capstone.herokuapp.com/).
+
+During local operation: [local link](http://localhost:5000)
 ### Dependanies
 \
 `Python3`
@@ -56,9 +57,12 @@ pip install -r requirements.txt
 
 To run the server after installing the requirements via pip, and have a database on postgresql called `rainforest_db`
 
-run the `setup.sh` file then run:
+edit the values for you local database credentials in `setup.sh`.
+
+Then run:
 
 ```bash
+setup.sh
 flask run
 ```
 
@@ -135,3 +139,104 @@ Patch: patch product
 
 Get `/products`
 
+sample request:
+
+```bash
+
+{
+  "products": [
+    {
+      "description": "a Rainforest exclusive t-shirt",
+      "id": 1,
+      "name": "Rainforset t-shirt - black/green",
+      "price": 10.99
+    },
+    {
+      "description": "a chocolate bar",
+      "id": 2,
+      "name": "snickers bar",
+      "price": 2.99
+    },
+    {
+      "description": "a chocolate bar",
+      "id": 3,
+      "name": "snickers bar",
+      "price": 2.99
+    }
+}
+
+```
+
+sample request:
+
+```bash
+
+```
+
+sample request:
+
+```bash
+
+```
+
+sample request:
+
+```bash
+
+```
+
+sample request:
+
+```bash
+
+```
+
+sample request:
+
+```bash
+
+```
+
+sample request:
+
+
+```bash
+
+```
+
+sample request:
+
+```bash
+sample request:
+
+```
+
+sample request:
+
+```bash
+
+```
+
+sample request:
+
+```bash
+
+```
+
+sample request:
+
+```bash
+
+```
+
+sample request:
+
+```bash
+
+```
+
+sample request:
+
+```bash
+
+```
