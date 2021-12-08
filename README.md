@@ -136,10 +136,21 @@ Patch: patch product
 ## Get
 
 ----
+Get '/'
+
+curl https://rainforest-capstone.herokuapp.com/
+
+```bash
+Welcome to Rainforest! :>
+```
 
 Get `/products`
 
 sample request:
+
+```bash
+curl https://rainforest-capstone.herokuapp.com/"products"
+```
 
 ```bash
 
@@ -167,7 +178,204 @@ sample request:
 
 ```
 
+Get `/products/id`
+
 sample request:
+
+```bash
+curl https://rainforest-capstone.herokuapp.com/"products/1"
+```
+
+Output:
+
+```bash
+{
+  "product": {
+    "description": "a Rainforest exclusive t-shirt",
+    "id": 1,
+    "name": "Rainforset t-shirt - black/green",
+    "price": 10.99
+  },
+  "success": true
+}
+
+```
+
+Get `users`
+
+sample request:
+
+```bash
+curl -H "Authorization: Bearer $STAFF_TOKEN" -X GET https://rainforest-capstone.herokuapp.com/"users"
+```
+
+Output:
+
+```bash
+{
+ "success": true,
+  "total_users": 56,
+  "users": [
+    {
+      "id": 1,
+      "name": "slippery sam"
+    },
+    {
+      "id": 2,
+      "name": "chris condo"
+    }
+  ]
+}
+```
+
+Get `/users/id`
+
+sample request:
+
+```bash
+curl -H "Authorization: Bearer $STAFF_TOKEN" -X GET https://rainforest-capstone.herokuapp.com/"users/1"
+```
+
+Output:
+
+```bash
+{
+  "success": true,
+  "user": {
+    "id": 1,
+    "name": "slippery sam"
+  }
+}
+```
+
+Get `orders`
+
+sample request:
+
+```bash
+curl -H "Authorization: Bearer $STAFF_TOKEN" -X GET https://rainforest-capstone.herokuapp.com/"orders"
+```
+
+Output:
+
+```bash
+
+{
+  "orders": [
+    {
+      "id": 1,
+      "user_id": 1
+    },
+    {
+      "id": 2,
+      "user_id": 2
+    }
+ ]
+}
+
+```
+
+Get `/orders/id`
+
+sample request:
+
+```bash
+curl -H "Authorization: Bearer $STAFF_TOKEN" -X GET https://rainforest-capstone.herokuapp.com/"orders/1"
+```
+
+Output:
+
+```bash
+{
+  "order": {
+    "id": 1,
+    "user_id": 1
+  },
+  "success": true
+}
+```
+
+Get `/order_items`
+
+sample request:
+
+```bash
+curl -H "Authorization: Bearer $STAFF_TOKEN" -X GET https://rainforest-capstone.herokuapp.com/"order_items"
+```
+
+Output:
+
+```bash
+{
+  "order_items": [
+    {
+      "id": 1,
+      "order_id": 1,
+      "product_id": 1,
+      "product_quantity": 2
+    },
+    {
+      "id": 2,
+      "order_id": 1,
+      "product_id": 1,
+      "product_quantity": 2
+    }
+ ]
+ "success": true,
+ "total_order_items": 55
+}
+```
+
+Get `/order_items/id`
+
+sample request:
+
+```bash
+curl -H "Authorization: Bearer $STAFF_TOKEN" -X GET https://rainforest-capstone.herokuapp.com/"order_items/1"
+```
+
+Output:
+
+```bash
+
+
+```
+
+## POST Requests
+
+----
+
+sample request:
+
+```bash
+
+```
+
+Output:
+
+```bash
+
+
+```
+
+sample request:
+
+```bash
+
+```
+
+Output:
+
+```bash
+
+```
+sample request:
+
+```bash
+
+```
+
+Output:
 
 ```bash
 
@@ -179,7 +387,7 @@ sample request:
 
 ```
 
-sample request:
+Output:
 
 ```bash
 
@@ -191,27 +399,7 @@ sample request:
 
 ```
 
-sample request:
-
-```bash
-
-```
-
-sample request:
-
-
-```bash
-
-```
-
-sample request:
-
-```bash
-sample request:
-
-```
-
-sample request:
+Output:
 
 ```bash
 
@@ -223,19 +411,7 @@ sample request:
 
 ```
 
-sample request:
-
-```bash
-
-```
-
-sample request:
-
-```bash
-
-```
-
-sample request:
+Output:
 
 ```bash
 
