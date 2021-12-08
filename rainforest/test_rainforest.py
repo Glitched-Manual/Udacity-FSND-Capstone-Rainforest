@@ -34,11 +34,11 @@ class RainforestTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "rainforest_db"
-        self.database_user = None
-        self.database_user_password = None
+        self.database_name = os.environ['DATABASE_NAME']
+        self.database_username = os.environ['DATABASE_USERNAME']
+        self.database_user_password = os.environ['DATABASE_USER_PASSWORD']
         self.database_path = "postgresql://{}:{}@{}/{}".format(
-            'student','student''localhost:5432', self.database_name) # replace with os.environ[]
+            self.database_username,self.database_user_password,'localhost:5432', self.database_name) # replace with os.environ[]
 
         self.owner_token = os.environ['OWNER_TOKEN']
         self.staff_token = os.environ['STAFF_TOKEN']

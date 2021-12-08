@@ -54,6 +54,15 @@ pip install -r requirements.txt
 
 ----
 
+To run the server after installing the requirements via pip, and have a database on postgresql called `rainforest_db`
+
+run the `setup.sh` file then run:
+
+```bash
+flask run
+```
+
+
 ## API Reference
 
 ----
@@ -76,3 +85,45 @@ The Rainforest API has two different roles:
 ## Error Handling
 
 ----
+
+Error are return in the json format below:
+
+```bash
+{
+  "error": 404, 
+  "message": "resource not found", 
+  "success": false
+}
+```
+
+The Rainforest returns the following response error code depending how the request fails:
+
+- 400 - Bad Request
+
+- 401 - Unauthorized
+
+- 403 - Forbidden
+
+- 404 - Not Found
+
+- 405 - Method Not Allowed
+
+- 422 - Unproccessible Entity
+
+- 500 - Internal Server Error
+
+## Endpoints
+----
+
+### methods 
+
+```html
+Get: get products, get users, get orders, get order_items
+
+Post:
+
+Delete:
+
+Patch:
+    
+```

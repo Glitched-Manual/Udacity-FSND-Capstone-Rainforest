@@ -15,5 +15,10 @@ export FLASK_DEBUG=true
 
 #local testing
 export DATABASE_NAME='rainforest_db'
-export DATABASE_USERNAME='enter postgres username here'
-export DATABASE_USER_PASSWORD='enter user password here'
+export DATABASE_USERNAME="user"
+export DATABASE_USER_PASSWORD="pass"
+
+fix_url="postgresql://${DATABASE_USERNAME}:${DATABASE_USER_PASSWORD}@localhost:5432/${DATABASE_NAME}"
+
+export DATABASE_URL_FIXED=$fix_url
+
