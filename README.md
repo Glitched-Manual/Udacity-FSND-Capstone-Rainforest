@@ -22,7 +22,6 @@ During local operation: [local link](http://localhost:5000)
 ### Dependanies
 
 \
-
 `Python3`
 \
 Python 3.9 is the reccommend version of python for running the Rainforest API.
